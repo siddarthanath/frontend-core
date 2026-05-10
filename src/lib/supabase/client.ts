@@ -1,11 +1,13 @@
 "use client";
 
+// PROVIDER SWAP POINT (frontend)
+// If/when you swap auth providers, you rewrite this file + get_current_user in the backend —
+// the rest of the app (repositories, services, endpoints) doesn't change.
+// Supabase → Firebase: replace createBrowserClient with initializeApp + getAuth.
+// Supabase → custom backend: replace with a fetch to your own /auth/session endpoint.
+
 import { createBrowserClient } from "@supabase/ssr";
 
-/**
- * Browser-side Supabase client — use in Client Components only.
- * Reads NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY at runtime.
- */
 export function createClient() {
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
