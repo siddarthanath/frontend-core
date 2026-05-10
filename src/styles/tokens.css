@@ -121,58 +121,86 @@
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
 }
 
-/* ─── Tailwind v4 @theme mapping ─────────────────────────── */
-@theme inline {
-  --color-bg:           var(--bg);
-  --color-bg-2:         var(--bg-2);
-  --color-bg-3:         var(--bg-3);
-  --color-fg:           var(--fg);
-  --color-fg-2:         var(--fg-2);
-  --color-fg-3:         var(--fg-3);
-  --color-border:       var(--border);
-  --color-border-2:     var(--border-2);
-  --color-surface:      var(--surface);
-  --color-surface-2:    var(--surface-2);
-  --color-brand:        var(--brand);
-  --color-brand-dim:    var(--brand-dim);
-  --color-brand-border: var(--brand-border);
-  --color-brand-fg:     var(--brand-fg);
-  --color-success:      var(--color-success);
-  --color-warning:      var(--color-warning);
-  --color-error:        var(--color-error);
-  --color-info:         var(--color-info);
-  --radius-sm:          var(--radius-sm);
-  --radius-md:          var(--radius-md);
-  --radius-lg:          var(--radius-lg);
-  --radius-xl:          var(--radius-xl);
-  --font-sans:          var(--font-sans);
-  --font-mono:          var(--font-mono);
-  --font-serif:         var(--font-serif);
-  --shadow-sm:          var(--shadow-sm);
-  --shadow-md:          var(--shadow-md);
-  --shadow-lg:          var(--shadow-lg);
+/* ─── shadcn variable mapping ────────────────────────────── */
+/* Maps shadcn's --name convention to our tokens.                   */
+/* Note: --border is NOT re-declared here — it's already set above. */
+:root {
+  --background:               var(--bg);
+  --foreground:               var(--fg);
+  --card:                     var(--surface);
+  --card-foreground:          var(--fg);
+  --popover:                  var(--surface);
+  --popover-foreground:       var(--fg);
+  --primary:                  var(--brand);
+  --primary-foreground:       var(--brand-on);
+  --secondary:                var(--bg-2);
+  --secondary-foreground:     var(--fg);
+  --muted:                    var(--bg-2);
+  --muted-foreground:         var(--fg-3);
+  --accent:                   var(--brand-dim);
+  --accent-foreground:        var(--brand-fg);
+  --destructive:              var(--accent-red);
+  --destructive-foreground:   #ffffff;
+  --input:                    var(--border);
+  --ring:                     var(--brand-border);
+  --radius:                   var(--radius-md);
 }
 
-/* ─── shadcn variable mapping ────────────────────────────── */
-:root {
-  --background:          var(--bg);
-  --foreground:          var(--fg);
-  --card:                var(--surface);
-  --card-foreground:     var(--fg);
-  --popover:             var(--surface);
-  --popover-foreground:  var(--fg);
-  --primary:             var(--brand);
-  --primary-foreground:  var(--brand-on);
-  --secondary:           var(--bg-2);
-  --secondary-foreground:var(--fg);
-  --muted:               var(--bg-2);
-  --muted-foreground:    var(--fg-3);
-  --accent:              var(--brand-dim);
-  --accent-foreground:   var(--brand-fg);
-  --destructive:         var(--color-error);
-  --destructive-foreground: #ffffff;
-  --border:              var(--border);
-  --input:               var(--border);
-  --ring:                var(--brand-border);
-  --radius:              var(--radius-md);
+/* ─── Tailwind v4 @theme mapping ─────────────────────────── */
+/* Two groups:                                                       */
+/*   1. Our short tokens (bg-bg, text-fg-2, etc.)                   */
+/*   2. shadcn aliases (bg-primary, text-destructive, etc.) so      */
+/*      shadcn components work without modification.                 */
+@theme inline {
+  /* Our design tokens */
+  --color-bg:                     var(--bg);
+  --color-bg-2:                   var(--bg-2);
+  --color-bg-3:                   var(--bg-3);
+  --color-fg:                     var(--fg);
+  --color-fg-2:                   var(--fg-2);
+  --color-fg-3:                   var(--fg-3);
+  --color-border:                 var(--border);
+  --color-border-2:               var(--border-2);
+  --color-surface:                var(--surface);
+  --color-surface-2:              var(--surface-2);
+  --color-brand:                  var(--brand);
+  --color-brand-dim:              var(--brand-dim);
+  --color-brand-border:           var(--brand-border);
+  --color-brand-fg:               var(--brand-fg);
+  --color-success:                var(--color-success);
+  --color-warning:                var(--color-warning);
+  --color-error:                  var(--color-error);
+  --color-info:                   var(--color-info);
+
+  /* shadcn aliases — bg-primary, text-primary-foreground, etc. */
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+
+  /* Radii, fonts, shadows */
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --font-sans:   var(--font-sans);
+  --font-mono:   var(--font-mono);
+  --font-serif:  var(--font-serif);
+  --shadow-sm:   var(--shadow-sm);
+  --shadow-md:   var(--shadow-md);
+  --shadow-lg:   var(--shadow-lg);
 }
