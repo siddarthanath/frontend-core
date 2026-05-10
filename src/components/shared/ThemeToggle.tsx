@@ -1,7 +1,7 @@
 "use client"
 
+import { useTheme } from "next-themes"
 import { Sun, Moon, Monitor } from "lucide-react"
-import { useUiStore } from "@/stores/ui"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useUiStore()
+  const { setTheme, resolvedTheme } = useTheme()
 
-  const icons = { light: Sun, dark: Moon, system: Monitor }
-  const Icon = icons[theme]
+  // resolvedTheme is "light" or "dark" (never "system") — use it for the icon
+  // so the button always shows the actual current appearance, not the setting.
+  const Icon = resolvedTheme === "dark" ? Moon : Sun
 
   return (
     <DropdownMenu>
