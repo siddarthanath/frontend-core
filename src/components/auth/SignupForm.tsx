@@ -53,7 +53,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" autoComplete="email" {...register("email")} />
         {errors.email && (
-          <p className="text-sm" style={{ color: "var(--color-destructive)" }}>
+          <p className="text-sm text-error">
             {errors.email.message}
           </p>
         )}
@@ -67,7 +67,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
           {...register("password")}
         />
         {errors.password && (
-          <p className="text-sm" style={{ color: "var(--color-destructive)" }}>
+          <p className="text-sm text-error">
             {errors.password.message}
           </p>
         )}
@@ -76,9 +76,9 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
         {isSubmitting ? "Creating account…" : "Create account"}
       </Button>
       <div className="relative flex items-center gap-3 py-1">
-        <div className="h-px flex-1" style={{ backgroundColor: "color-mix(in srgb, var(--color-muted) 30%, transparent)" }} />
-        <span className="text-xs" style={{ color: "var(--color-muted-foreground)" }}>or continue with</span>
-        <div className="h-px flex-1" style={{ backgroundColor: "color-mix(in srgb, var(--color-muted) 30%, transparent)" }} />
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs text-fg-3">or continue with</span>
+        <div className="h-px flex-1 bg-border" />
       </div>
       <div className="flex flex-col gap-2">
         <GoogleButton redirectTo={redirectTo} />

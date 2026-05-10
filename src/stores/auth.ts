@@ -1,22 +1,29 @@
-import { create } from "zustand";
-import type { Session, User } from "@supabase/supabase-js";
+"use client"
 
-interface AuthState {
-  user: User | null;
-  session: Session | null;
-  setUser: (user: User | null) => void;
-  setSession: (session: Session | null) => void;
-  clearSession: () => void;
+import { create } from "zustand"
+import type { User } from "@supabase/supabase-js"
+
+interface OrgContext {
+  id: string
+  name: string
 }
 
-/**
- * Client-side auth state. Source of truth is Supabase — this store
- * caches it so components don't need async reads on every render.
- */
-export const useAuthStore = create<AuthState>((set) => ({
+interface AuthState {
+  user: User | null
+  setUser: (user: User | null) => void
+
+  currentOrg: OrgContext | null
+  setCurrentOrg: (org: OrgContext | null) => void
+
+  isAuthenticated: boolean
+}
+
+export const useAuthStore = create<AuthState>()((set) => ({
   user: null,
-  session: null,
-  setUser: (user) => set({ user }),
-  setSession: (session) => set({ session, user: session?.user ?? null }),
-  clearSession: () => set({ user: null, session: null }),
-}));
+  setUser: (user) => set({ user, isAuthenticated: !!user }),
+
+  currentOrg: null,
+  setCurrentOrg: (org) => set({ currentOrg: org }),
+
+  isAuthenticated: false,
+}))

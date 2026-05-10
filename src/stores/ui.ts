@@ -1,32 +1,59 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+"use client"
 
-type Theme = "light" | "dark" | "system";
+import { create } from "zustand"
+import { persist } from "zustand/middleware"
 
-interface UiState {
-  sidebarOpen: boolean;
-  theme: Theme;
-  toggleSidebar: () => void;
-  setSidebarOpen: (open: boolean) => void;
-  setTheme: (theme: Theme) => void;
+type Theme = "light" | "dark" | "system"
+
+interface UIState {
+  sidebarCollapsed: boolean
+  sidebarOpen: boolean
+  toggleSidebar: () => void
+  openSidebar: () => void
+  closeSidebar: () => void
+
+  theme: Theme
+  setTheme: (theme: Theme) => void
+
+  openModals: string[]
+  openModal: (key: string) => void
+  closeModal: (key: string) => void
+  isModalOpen: (key: string) => boolean
 }
 
-/**
- * UI state store. Theme is persisted to localStorage so it survives page reloads.
- * Sidebar state is in-memory only — resets on refresh by design.
- */
-export const useUiStore = create<UiState>()(
+export const useUiStore = create<UIState>()(
   persist(
-    (set) => ({
-      sidebarOpen: true,
+    (set, get) => ({
+      sidebarCollapsed: false,
+      sidebarOpen: false,
+      toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+      openSidebar: () => set({ sidebarOpen: true }),
+      closeSidebar: () => set({ sidebarOpen: false }),
+
       theme: "system",
-      toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
-      setSidebarOpen: (open) => set({ sidebarOpen: open }),
-      setTheme: (theme) => set({ theme }),
+      setTheme: (theme) => {
+        set({ theme })
+        const dark =
+          theme === "dark" ||
+          (theme === "system" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches)
+        document.documentElement.classList.toggle("dark", dark)
+      },
+
+      openModals: [],
+      openModal: (key) =>
+        set((s) => ({
+          openModals: s.openModals.includes(key)
+            ? s.openModals
+            : [...s.openModals, key],
+        })),
+      closeModal: (key) =>
+        set((s) => ({ openModals: s.openModals.filter((k) => k !== key) })),
+      isModalOpen: (key) => get().openModals.includes(key),
     }),
     {
       name: "ui-store",
-      partialize: (state) => ({ theme: state.theme }),
+      partialize: (s) => ({ theme: s.theme, sidebarCollapsed: s.sidebarCollapsed }),
     }
   )
-);
+)
