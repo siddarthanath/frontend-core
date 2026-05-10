@@ -1,87 +1,206 @@
-/* Design tokens — all visual decisions live here as CSS custom properties.
-   To swap brand: override --color-brand-* only. Zero component changes needed. */
-
+/* ─── Radius ─────────────────────────────────────────────── */
 :root {
-  /* Brand */
-  --color-brand-50: oklch(97% 0.02 250);
-  --color-brand-100: oklch(93% 0.05 250);
-  --color-brand-200: oklch(86% 0.09 250);
-  --color-brand-300: oklch(77% 0.13 250);
-  --color-brand-400: oklch(66% 0.17 250);
-  --color-brand-500: oklch(55% 0.20 250);
-  --color-brand-600: oklch(46% 0.18 250);
-  --color-brand-700: oklch(38% 0.15 250);
-  --color-brand-800: oklch(30% 0.11 250);
-  --color-brand-900: oklch(22% 0.07 250);
-
-  /* Neutral */
-  --color-neutral-50: oklch(98% 0 0);
-  --color-neutral-100: oklch(95% 0 0);
-  --color-neutral-200: oklch(90% 0 0);
-  --color-neutral-300: oklch(82% 0 0);
-  --color-neutral-400: oklch(70% 0 0);
-  --color-neutral-500: oklch(58% 0 0);
-  --color-neutral-600: oklch(45% 0 0);
-  --color-neutral-700: oklch(35% 0 0);
-  --color-neutral-800: oklch(25% 0 0);
-  --color-neutral-900: oklch(15% 0 0);
-
-  /* Semantic */
-  --color-background: var(--color-neutral-50);
-  --color-foreground: var(--color-neutral-900);
-  --color-surface: #ffffff;
-  --color-surface-raised: var(--color-neutral-100);
-  --color-border: var(--color-neutral-200);
-  --color-muted: var(--color-neutral-500);
-
-  /* Status */
-  --color-success: oklch(55% 0.15 145);
-  --color-warning: oklch(70% 0.18 75);
-  --color-error: oklch(55% 0.20 25);
-
-  /* Radius */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
   --radius-full: 9999px;
-
-  /* Spacing scale (multiples of 4px) */
-  --spacing-1: 0.25rem;
-  --spacing-2: 0.5rem;
-  --spacing-3: 0.75rem;
-  --spacing-4: 1rem;
-  --spacing-6: 1.5rem;
-  --spacing-8: 2rem;
-  --spacing-12: 3rem;
-  --spacing-16: 4rem;
-
-  /* Typography */
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, monospace;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.05);
-  --shadow-md: 0 4px 6px oklch(0% 0 0 / 0.07);
-  --shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.10);
-
-  /* Layout */
-  --sidebar-width: 240px;
-  --header-height: 56px;
 }
 
+/* ─── Spacing (for non-Tailwind contexts: SVG, inline styles) */
+:root {
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+}
+
+/* ─── Typography ─────────────────────────────────────────── */
+:root {
+  --font-sans:  ui-sans-serif, system-ui, sans-serif;
+  --font-mono:  ui-monospace, monospace;
+  --font-serif: Georgia, serif;
+
+  --text-xs:   11px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   17px;
+  --text-lg:   20px;
+  --text-xl:   26px;
+  --text-2xl:  32px;
+  --text-3xl:  42px;
+  --text-4xl:  54px;
+
+  --leading-tight:  1.1;
+  --leading-snug:   1.35;
+  --leading-normal: 1.6;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;
+}
+
+/* ─── Neutral palette (light) ────────────────────────────── */
+:root {
+  --bg:       #f8f7f3;
+  --bg-2:     #eeecea;
+  --bg-3:     #e5e1d8;
+  --fg:       #1a1a1a;
+  --fg-2:     #555;
+  --fg-3:     #999;
+  --border:   #d9d5cc;
+  --border-2: #c8c4bb;
+  --surface:  #ffffff;
+  --surface-2:#f2f0ea;
+}
+
+/* ─── Brand palette (light) ──────────────────────────────── */
+:root {
+  --brand:        #c9a84c;
+  --brand-dim:    rgba(201,168,76,0.12);
+  --brand-border: rgba(201,168,76,0.28);
+  --brand-fg:     #7a5c10;
+  --brand-on:     #000000;
+
+  --accent-blue:   #2d6a94;
+  --accent-green:  #2e7d58;
+  --accent-red:    #cc3333;
+  --accent-purple: #7d4a9a;
+}
+
+/* ─── Semantic colours (light) ───────────────────────────── */
+:root {
+  --color-success: var(--accent-green);
+  --color-warning: var(--brand);
+  --color-error:   var(--accent-red);
+  --color-info:    var(--accent-blue);
+}
+
+/* ─── Shadows ─────────────────────────────────────────────── */
+:root {
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+/* ─── Layout ─────────────────────────────────────────────── */
+:root {
+  --sidebar-width:    214px;
+  --sidebar-collapsed: 62px;
+  --header-height:    54px;
+  --panel-width:      260px;
+}
+
+/* ─── Dark mode ──────────────────────────────────────────── */
 .dark {
-  --color-background: var(--color-neutral-900);
-  --color-foreground: var(--color-neutral-50);
-  --color-surface: oklch(20% 0 0);
-  --color-surface-raised: oklch(25% 0 0);
-  --color-border: var(--color-neutral-700);
-  --color-muted: var(--color-neutral-400);
+  --bg:       #0b0c10;
+  --bg-2:     #111318;
+  --bg-3:     #16181f;
+  --fg:       #f0ead8;
+  --fg-2:     rgba(240,234,216,0.6);
+  --fg-3:     rgba(240,234,216,0.28);
+  --border:   rgba(255,255,255,0.07);
+  --border-2: rgba(255,255,255,0.12);
+  --surface:  #111318;
+  --surface-2:#16181f;
+
+  --brand:        #c9a84c;
+  --brand-dim:    rgba(201,168,76,0.14);
+  --brand-border: rgba(201,168,76,0.24);
+  --brand-fg:     #c9a84c;
+  --brand-on:     #000000;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+/* ─── shadcn variable mapping ────────────────────────────── */
+/* Maps shadcn's --name convention to our tokens.                   */
+/* Note: --border is NOT re-declared here — it's already set above. */
+:root {
+  --background:               var(--bg);
+  --foreground:               var(--fg);
+  --card:                     var(--surface);
+  --card-foreground:          var(--fg);
+  --popover:                  var(--surface);
+  --popover-foreground:       var(--fg);
+  --primary:                  var(--brand);
+  --primary-foreground:       var(--brand-on);
+  --secondary:                var(--bg-2);
+  --secondary-foreground:     var(--fg);
+  --muted:                    var(--bg-2);
+  --muted-foreground:         var(--fg-3);
+  --accent:                   var(--brand-dim);
+  --accent-foreground:        var(--brand-fg);
+  --destructive:              var(--accent-red);
+  --destructive-foreground:   #ffffff;
+  --input:                    var(--border);
+  --ring:                     var(--brand-border);
+  --radius:                   var(--radius-md);
+}
+
+/* ─── Tailwind v4 @theme mapping ─────────────────────────── */
+/* Two groups:                                                       */
+/*   1. Our short tokens (bg-bg, text-fg-2, etc.)                   */
+/*   2. shadcn aliases (bg-primary, text-destructive, etc.) so      */
+/*      shadcn components work without modification.                 */
+@theme inline {
+  /* Our design tokens */
+  --color-bg:                     var(--bg);
+  --color-bg-2:                   var(--bg-2);
+  --color-bg-3:                   var(--bg-3);
+  --color-fg:                     var(--fg);
+  --color-fg-2:                   var(--fg-2);
+  --color-fg-3:                   var(--fg-3);
+  --color-border:                 var(--border);
+  --color-border-2:               var(--border-2);
+  --color-surface:                var(--surface);
+  --color-surface-2:              var(--surface-2);
+  --color-brand:                  var(--brand);
+  --color-brand-dim:              var(--brand-dim);
+  --color-brand-border:           var(--brand-border);
+  --color-brand-fg:               var(--brand-fg);
+  --color-success:                var(--color-success);
+  --color-warning:                var(--color-warning);
+  --color-error:                  var(--color-error);
+  --color-info:                   var(--color-info);
+
+  /* shadcn aliases — bg-primary, text-primary-foreground, etc. */
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-card:                   var(--card);
+  --color-card-foreground:        var(--card-foreground);
+  --color-popover:                var(--popover);
+  --color-popover-foreground:     var(--popover-foreground);
+  --color-primary:                var(--primary);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-muted:                  var(--muted);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-accent:                 var(--accent);
+  --color-accent-foreground:      var(--accent-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+
+  /* Radii, fonts, shadows */
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --font-sans:   var(--font-sans);
+  --font-mono:   var(--font-mono);
+  --font-serif:  var(--font-serif);
+  --shadow-sm:   var(--shadow-sm);
+  --shadow-md:   var(--shadow-md);
+  --shadow-lg:   var(--shadow-lg);
 }

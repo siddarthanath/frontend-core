@@ -1,44 +1,45 @@
-"use client";
+"use client"
 
-import { Component, type ReactNode } from "react";
+import { Component, type ReactNode, type ErrorInfo } from "react"
+import { Button } from "@/components/ui/button"
 
 interface Props {
-  children: ReactNode;
-  fallback?: ReactNode;
+  children: ReactNode
+  fallback?: ReactNode
 }
 
 interface State {
-  hasError: boolean;
-  error: Error | null;
+  error: Error | null
 }
 
-/**
- * React error boundary — catches unhandled render errors and shows fallback UI.
- * Must be a class component (React requirement for error boundaries).
- * Wraps root layout and AppShell so no render error produces a white screen.
- */
 export class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, error: null };
+  state: State = { error: null }
 
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };
+    return { error }
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    // Swap for Sentry.captureException(error) in production
+    console.error("Unhandled render error", error, info.componentStack)
   }
 
   render() {
-    if (this.state.hasError) {
+    if (this.state.error) {
       return (
         this.props.fallback ?? (
-          <div className="flex min-h-screen items-center justify-center p-8">
-            <div className="max-w-md text-center">
-              <h2 className="mb-2 text-lg font-semibold">Something went wrong</h2>
-              <p className="text-sm" style={{ color: "var(--color-muted)" }}>
-                {this.state.error?.message ?? "An unexpected error occurred."}
-              </p>
-            </div>
+          <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-bg text-fg">
+            <h1 className="text-xl font-semibold">Something went wrong</h1>
+            <p className="max-w-xs text-center text-sm text-fg-2">
+              {this.state.error.message}
+            </p>
+            <Button variant="outline" onClick={() => this.setState({ error: null })}>
+              Try again
+            </Button>
           </div>
         )
-      );
+      )
     }
-    return this.props.children;
+    return this.props.children
   }
 }

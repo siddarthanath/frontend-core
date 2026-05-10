@@ -1,38 +1,42 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { useUiStore } from "@/stores/ui";
+import { useTheme } from "next-themes"
+import { Sun, Moon, Monitor } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-type Theme = "light" | "dark" | "system";
-
-function applyTheme(theme: Theme) {
-  const root = document.documentElement;
-  if (theme === "system") {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    root.classList.toggle("dark", prefersDark);
-  } else {
-    root.classList.toggle("dark", theme === "dark");
-  }
-}
-
-/** Light / dark / system toggle. Writes to ui store + applies class to <html>. */
 export function ThemeToggle() {
-  const { theme, setTheme } = useUiStore();
+  const { setTheme, resolvedTheme } = useTheme()
 
-  useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
-
-  const next: Theme = theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
-  const label = theme === "light" ? "☀️" : theme === "dark" ? "🌙" : "💻";
+  // resolvedTheme is "light" or "dark" (never "system") — use it for the icon
+  // so the button always shows the actual current appearance, not the setting.
+  const Icon = resolvedTheme === "dark" ? Moon : Sun
 
   return (
-    <button
-      onClick={() => setTheme(next)}
-      aria-label={`Switch to ${next} mode`}
-      className="rounded-md p-2 text-sm transition-colors hover:bg-[var(--color-surface-raised)]"
-    >
-      {label}
-    </button>
-  );
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-bg-2 text-fg-2"
+          aria-label="Toggle theme"
+        >
+          <Icon size={15} />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          <Sun size={14} className="mr-2" /> Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          <Moon size={14} className="mr-2" /> Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          <Monitor size={14} className="mr-2" /> System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
 }
