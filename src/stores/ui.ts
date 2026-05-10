@@ -7,12 +7,13 @@ type Theme = "light" | "dark" | "system"
 
 interface UIState {
   sidebarCollapsed: boolean
-  sidebarOpen: boolean
   toggleSidebar: () => void
-  openSidebar: () => void
-  closeSidebar: () => void
 
   theme: Theme
+  // Note: setTheme applies .dark to <html> directly — this is intentional and safe because
+  // ThemeToggle is client-only. Known gap: cross-tab theme changes won't update the DOM in
+  // other tabs (persist syncs storage but doesn't re-run setTheme). Acceptable for a template;
+  // add a window storage event listener if real-time cross-tab sync becomes a requirement.
   setTheme: (theme: Theme) => void
 
   openModals: string[]
@@ -25,10 +26,7 @@ export const useUiStore = create<UIState>()(
   persist(
     (set, get) => ({
       sidebarCollapsed: false,
-      sidebarOpen: false,
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
-      openSidebar: () => set({ sidebarOpen: true }),
-      closeSidebar: () => set({ sidebarOpen: false }),
 
       theme: "system",
       setTheme: (theme) => {
