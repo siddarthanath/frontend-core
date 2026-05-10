@@ -5,10 +5,11 @@ import { SignOutButton } from "@/components/auth/SignOutButton"
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+    error,
+  } = await supabase.auth.getUser()
 
-  if (!session) redirect("/login")
+  if (error || !user) redirect("/login")
 
   return (
     <div style={{ background: "var(--color-background)", minHeight: "100vh" }}>
@@ -23,7 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           frontend-core
         </span>
         <div className="flex items-center gap-4">
-          <span style={{ color: "var(--color-muted)" }}>{session.user.email}</span>
+          <span style={{ color: "var(--color-muted)" }}>{user.email}</span>
           <SignOutButton />
         </div>
       </header>
