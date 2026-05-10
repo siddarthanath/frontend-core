@@ -3,13 +3,17 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider } from "next-themes"
 import { Toaster } from "sonner"
-import { type ReactNode, useState } from "react"
+import { type ReactNode, useState, useEffect } from "react"
 
 interface ProvidersProps {
   children: ReactNode
 }
 
 export function Providers({ children }: ProvidersProps) {
+  useEffect(() => {
+    ;(window as Window & { __reactReady?: boolean }).__reactReady = true
+  }, [])
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
