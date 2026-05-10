@@ -1,0 +1,87 @@
+/* Design tokens — all visual decisions live here as CSS custom properties.
+   To swap brand: override --color-brand-* only. Zero component changes needed. */
+
+:root {
+  /* Brand */
+  --color-brand-50: oklch(97% 0.02 250);
+  --color-brand-100: oklch(93% 0.05 250);
+  --color-brand-200: oklch(86% 0.09 250);
+  --color-brand-300: oklch(77% 0.13 250);
+  --color-brand-400: oklch(66% 0.17 250);
+  --color-brand-500: oklch(55% 0.20 250);
+  --color-brand-600: oklch(46% 0.18 250);
+  --color-brand-700: oklch(38% 0.15 250);
+  --color-brand-800: oklch(30% 0.11 250);
+  --color-brand-900: oklch(22% 0.07 250);
+
+  /* Neutral */
+  --color-neutral-50: oklch(98% 0 0);
+  --color-neutral-100: oklch(95% 0 0);
+  --color-neutral-200: oklch(90% 0 0);
+  --color-neutral-300: oklch(82% 0 0);
+  --color-neutral-400: oklch(70% 0 0);
+  --color-neutral-500: oklch(58% 0 0);
+  --color-neutral-600: oklch(45% 0 0);
+  --color-neutral-700: oklch(35% 0 0);
+  --color-neutral-800: oklch(25% 0 0);
+  --color-neutral-900: oklch(15% 0 0);
+
+  /* Semantic */
+  --color-background: var(--color-neutral-50);
+  --color-foreground: var(--color-neutral-900);
+  --color-surface: #ffffff;
+  --color-surface-raised: var(--color-neutral-100);
+  --color-border: var(--color-neutral-200);
+  --color-muted: var(--color-neutral-500);
+
+  /* Status */
+  --color-success: oklch(55% 0.15 145);
+  --color-warning: oklch(70% 0.18 75);
+  --color-error: oklch(55% 0.20 25);
+
+  /* Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Spacing scale (multiples of 4px) */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-8: 2rem;
+  --spacing-12: 3rem;
+  --spacing-16: 4rem;
+
+  /* Typography */
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.05);
+  --shadow-md: 0 4px 6px oklch(0% 0 0 / 0.07);
+  --shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.10);
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --header-height: 56px;
+}
+
+.dark {
+  --color-background: var(--color-neutral-900);
+  --color-foreground: var(--color-neutral-50);
+  --color-surface: oklch(20% 0 0);
+  --color-surface-raised: oklch(25% 0 0);
+  --color-border: var(--color-neutral-700);
+  --color-muted: var(--color-neutral-400);
+}

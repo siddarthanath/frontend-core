@@ -1,8 +1,8 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient, type CookieOptions } from "@supabase/ssr"
+import { NextResponse, type NextRequest } from "next/server"
 
 export async function proxy(request: NextRequest) {
-  const supabaseResponse = NextResponse.next({ request });
+  const supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -12,22 +12,37 @@ export async function proxy(request: NextRequest) {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet: { name: string; value: string; options: CookieOptions }[]) => {
           cookiesToSet.forEach(({ name, value, options }) => {
-            request.cookies.set(name, value);
-            supabaseResponse.cookies.set(name, value, options);
-          });
+            request.cookies.set(name, value)
+            supabaseResponse.cookies.set(name, value, options)
+          })
         },
       },
     }
-  );
+  )
 
-  // Refresh session on every request — keeps JWT fresh.
-  // Route protection (redirect unauthenticated users) added in Round 2
-  // once auth pages (/login, /signup) exist.
-  await supabase.auth.getSession();
+  // Refresh session — MUST happen before any redirect logic
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
 
-  return supabaseResponse;
+  const { pathname } = request.nextUrl
+
+  // Protect all /app/* routes — redirect unauthenticated users to login
+  if (pathname.startsWith("/app") && !session) {
+    return NextResponse.redirect(new URL("/login", request.url))
+  }
+
+  // Redirect authenticated users away from auth pages
+  if (session && (pathname === "/login" || pathname === "/signup")) {
+    return NextResponse.redirect(new URL("/app/dashboard", request.url))
+  }
+
+  return supabaseResponse
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api/).*)"],
-};
+  matcher: [
+    // Skip static assets, _next internals, and API routes
+    "/((?!_next/static|_next/image|favicon.ico|api/).*)",
+  ],
+}
