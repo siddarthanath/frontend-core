@@ -42,11 +42,7 @@ export function OAuthButton({
     <button
       onClick={handleClick}
       type="button"
-      className="flex w-full items-center justify-center gap-3 rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/5"
-      style={{
-        borderColor: "color-mix(in srgb, var(--color-muted) 30%, transparent)",
-        color: "var(--color-foreground)",
-      }}
+      className="flex w-full items-center justify-center gap-3 rounded-md border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-bg-3 hover:border-border-2"
     >
       {icon}
       {label}
