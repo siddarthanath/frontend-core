@@ -29,6 +29,9 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   async function onSubmit(data: FormData) {
+    // Account linking: if this email already exists via Google/Microsoft OAuth, Supabase will
+    // create a duplicate account unless "Allow users to link multiple OAuth accounts" is enabled
+    // in Supabase dashboard → Authentication → Settings. Enable it — users forget how they signed up.
     const supabase = createClient()
     const { error } = await supabase.auth.signUp({
       email: data.email,
