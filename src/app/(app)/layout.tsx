@@ -4,6 +4,10 @@ import { SignOutButton } from "@/components/auth/SignOutButton"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
+  // getUser() contacts Supabase Auth server to verify the token — use this in server components.
+  // Never use getSession() in server components: it reads from cookies only and can be spoofed.
+  // proxy.ts uses getSession() intentionally — it's an optimistic check only, and the backend
+  // re-verifies the JWT on every API call, so cookie spoofing there has no real security impact.
   const {
     data: { user },
     error,
