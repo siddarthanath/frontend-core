@@ -40,7 +40,7 @@ export function ResetPasswordForm() {
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" autoComplete="email" {...register("email")} />
         {errors.email && (
-          <p className="text-sm" style={{ color: "oklch(0.577 0.245 27.325)" }}>
+          <p className="text-sm" style={{ color: "var(--color-destructive)" }}>
             {errors.email.message}
           </p>
         )}

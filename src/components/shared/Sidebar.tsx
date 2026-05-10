@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useUiStore } from "@/stores/ui";
 
 export interface NavItem {
@@ -33,14 +34,14 @@ export function Sidebar({ items = [] }: SidebarProps) {
     >
       <nav className="flex flex-col gap-1 p-3">
         {items.map((item) => (
-          <a
+          <Link
             key={item.href}
             href={item.href}
             className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-[var(--color-surface-raised)]"
           >
             {item.icon}
             {item.label}
-          </a>
+          </Link>
         ))}
         {items.length === 0 && (
           <p className="px-3 py-2 text-xs" style={{ color: "var(--color-muted)" }}>

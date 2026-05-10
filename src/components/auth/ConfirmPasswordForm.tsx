@@ -50,7 +50,7 @@ export function ConfirmPasswordForm() {
           {...register("password")}
         />
         {errors.password && (
-          <p className="text-sm" style={{ color: "oklch(0.577 0.245 27.325)" }}>
+          <p className="text-sm" style={{ color: "var(--color-destructive)" }}>
             {errors.password.message}
           </p>
         )}
@@ -64,7 +64,7 @@ export function ConfirmPasswordForm() {
           {...register("confirm")}
         />
         {errors.confirm && (
-          <p className="text-sm" style={{ color: "oklch(0.577 0.245 27.325)" }}>
+          <p className="text-sm" style={{ color: "var(--color-destructive)" }}>
             {errors.confirm.message}
           </p>
         )}
