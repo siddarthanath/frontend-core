@@ -10,11 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ThemeToggle() {
-  const { setTheme, resolvedTheme } = useTheme()
-
-  // resolvedTheme is "light" or "dark" (never "system") — use it for the icon
-  // so the button always shows the actual current appearance, not the setting.
-  const Icon = resolvedTheme === "dark" ? Moon : Sun
+  const { setTheme } = useTheme()
 
   return (
     <DropdownMenu>
@@ -23,7 +19,8 @@ export function ThemeToggle() {
           className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-bg-2 text-fg-2"
           aria-label="Toggle theme"
         >
-          <Icon size={15} />
+          <Sun size={15} className="dark:hidden" />
+          <Moon size={15} className="hidden dark:block" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

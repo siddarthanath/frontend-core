@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Script from "next/script"
 import "./globals.css"
 import { Providers } from "@/app/providers"
 
@@ -22,7 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
              reload. 2000ms >> typical hydration time (~50ms prod, ~1s dev), so
              this never fires on a healthy page load.
         */}
-        <script dangerouslySetInnerHTML={{ __html: `window.addEventListener('pageshow',function(e){if(e.persisted)window.location.reload()});window.__reactReady=false;setTimeout(function(){if(!window.__reactReady)window.location.reload()},2000)` }} />
+        <Script
+          id="bfcache-fix"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: `window.addEventListener('pageshow',function(e){if(e.persisted)window.location.reload()});window.__reactReady=false;setTimeout(function(){if(!window.__reactReady)window.location.reload()},2000)` }}
+        />
       </head>
       <body>
         <Providers>{children}</Providers>
