@@ -57,7 +57,7 @@ export function PricingCard({
         disabled={isCurrentPlan || loading}
         onClick={onUpgrade}
       >
-        {isCurrentPlan ? "Current plan" : `Upgrade to ${planLabel}`}
+        {isCurrentPlan ? "Current plan" : plan === "free" ? "Continue for free" : `Upgrade to ${planLabel}`}
       </Button>
     </div>
   )
