@@ -7,7 +7,13 @@ import { HydrateAuthStore } from "@/components/shared/HydrateAuthStore"
 
 // Onboarding is authenticated but has no AppShell.
 // Session guard mirrors (app)/layout.tsx — unauthenticated users go to /login.
-// The two-step flow: /onboarding/create-org → /onboarding/pick-plan → /app/dashboard.
+//
+// B2B pattern (current): two-step flow — create workspace → pick plan → /app/dashboard.
+// Users explicitly name their org (team workspace concept, e.g. Linear, Vercel, Notion).
+//
+// B2C / solo pattern: skip create-org entirely. Auto-create a personal org on signup
+// in the backend (see user.py get_me), then route signup directly to /onboarding/pick-plan
+// (one step). Remove this layout's create-org route and the useAutoSelectOrg redirect.
 export default async function OnboardingLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user }, error } = await supabase.auth.getUser()

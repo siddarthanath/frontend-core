@@ -13,6 +13,8 @@ function toSlug(value: string) {
   return value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
 }
 
+// B2B pattern: user explicitly names their workspace (visible to teammates).
+// B2C: delete this page entirely. Auto-create the org in user.py and go straight to pick-plan.
 export default function CreateOrgPage() {
   const router = useRouter()
   const { setCurrentOrg } = useAuthStore()
@@ -32,8 +34,7 @@ export default function CreateOrgPage() {
     setSlug(toSlug(value))
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+  async function handleSubmit() {
     try {
       const org = await createOrg.mutateAsync({ name: name.trim(), slug })
       // Auto-select the new org so pick-plan can read currentOrg.id from the store.
@@ -59,7 +60,7 @@ export default function CreateOrgPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={(e) => { e.preventDefault(); void handleSubmit() }} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="name">Organisation name</Label>
           <Input
