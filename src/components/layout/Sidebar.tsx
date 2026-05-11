@@ -4,21 +4,15 @@ import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import { PanelLeftClose, PanelLeftOpen, LayoutDashboard, Users, Settings, CreditCard } from "lucide-react"
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { NavItem } from "@/types/nav"
+import { NAV_ITEMS } from "@/types/nav"
 import { useUiStore } from "@/stores/ui"
 import { useAuthStore } from "@/stores/auth"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
 import { UserMenu } from "@/components/shared/UserMenu"
 import { OrgSwitcher } from "@/components/org/OrgSwitcher"
 
-const NAV_ITEMS: NavItem[] = [
-  { href: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/app/settings/members", label: "Members", icon: Users },
-  { href: "/app/settings/org", label: "Organisation", icon: Settings },
-  { href: "/app/settings/billing", label: "Billing", icon: CreditCard },
-]
 
 interface SidebarProps {
   defaultCollapsed?: boolean

@@ -9,8 +9,7 @@ import { PlanBadge } from "@/components/billing/PlanBadge"
 import { PricingCard } from "@/components/billing/PricingCard"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { EmptyState } from "@/components/shared/EmptyState"
-import { Building2 } from "lucide-react"
+import { RequireOrg } from "@/components/shared/RequireOrg"
 import type { Plan } from "@/types/billing"
 
 const PLANS: {
@@ -51,18 +50,6 @@ export function BillingPageClient() {
   const createCheckout = useCreateCheckout(currentOrg?.id ?? "")
   const createPortal = useCreatePortal(currentOrg?.id ?? "")
 
-  if (!currentOrg) {
-    return (
-      <div className="p-6">
-        <EmptyState
-          icon={<Building2 size={32} />}
-          title="No organisation selected"
-          description="Select or create an organisation from the sidebar."
-        />
-      </div>
-    )
-  }
-
   async function handleUpgrade(plan: Plan) {
     try {
       const { checkout_url } = await createCheckout.mutateAsync({
@@ -88,12 +75,13 @@ export function BillingPageClient() {
   }
 
   return (
+    <RequireOrg>
     <div className="p-6 flex flex-col gap-8">
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-xl font-semibold text-fg">Billing</h1>
-          <p className="text-sm text-fg-2 mt-1">{currentOrg.name}</p>
+          <p className="text-sm text-fg-2 mt-1">{currentOrg!.name}</p>
         </div>
         {subscription?.stripe_subscription_id && (
           <Button
@@ -155,5 +143,6 @@ export function BillingPageClient() {
         </div>
       </div>
     </div>
+    </RequireOrg>
   )
 }

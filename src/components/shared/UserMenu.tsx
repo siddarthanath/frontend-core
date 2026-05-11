@@ -3,10 +3,10 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Users, Settings, CreditCard, LogOut } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
+import { signOut } from "@/lib/supabase/client"
 import { useAuthStore } from "@/stores/auth"
 import { useSubscription } from "@/lib/api/billing"
-import type { Plan } from "@/types/billing"
+import { PLAN_LABELS_LONG } from "@/types/billing"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,11 +22,6 @@ const MENU_ITEMS = [
   { href: "/app/settings/billing", label: "Billing", icon: CreditCard },
 ]
 
-const PLAN_LABELS: Record<Plan, string> = {
-  free: "Free plan",
-  pro: "Pro plan",
-  enterprise: "Enterprise plan",
-}
 
 interface UserMenuProps {
   email: string
@@ -38,12 +33,11 @@ export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
   const router = useRouter()
   const currentOrg = useAuthStore((s) => s.currentOrg)
   const { data: subscription } = useSubscription(currentOrg?.id ?? "")
-  const planLabel = PLAN_LABELS[subscription?.plan ?? "free"]
+  const planLabel = PLAN_LABELS_LONG[subscription?.plan ?? "free"]
   const initial = (displayName ?? email).charAt(0).toUpperCase()
 
   async function handleSignOut() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    await signOut()
     router.push("/login")
     router.refresh()
   }

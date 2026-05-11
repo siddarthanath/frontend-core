@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { PLAN_LABELS } from "@/types/billing"
 import type { Plan } from "@/types/billing"
 
 interface PlanBadgeProps {
@@ -10,12 +11,6 @@ const PLAN_STYLES: Record<Plan, string> = {
   free: "bg-bg-2 text-fg-2",
   pro: "bg-brand-dim text-brand-fg",
   enterprise: "bg-[hsl(var(--color-warning)/0.15)] text-[hsl(var(--color-warning))]",
-}
-
-const PLAN_LABELS: Record<Plan, string> = {
-  free: "Free",
-  pro: "Pro",
-  enterprise: "Enterprise",
 }
 
 export function PlanBadge({ plan, className }: PlanBadgeProps) {

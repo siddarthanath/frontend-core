@@ -3,18 +3,11 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Menu, LayoutDashboard, Users, Settings, CreditCard } from "lucide-react"
+import { Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
-import type { NavItem } from "@/types/nav"
-
-const NAV_ITEMS: NavItem[] = [
-  { href: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/app/settings/members", label: "Members", icon: Users },
-  { href: "/app/settings/org", label: "Organisation", icon: Settings },
-  { href: "/app/settings/billing", label: "Billing", icon: CreditCard },
-]
+import { NAV_ITEMS } from "@/types/nav"
 
 export function MobileHeader() {
   const items = NAV_ITEMS
