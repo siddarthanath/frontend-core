@@ -137,8 +137,8 @@
   --secondary-foreground:     var(--fg);
   --muted:                    var(--bg-2);
   --muted-foreground:         var(--fg-3);
-  --accent:                   var(--brand-dim);
-  --accent-foreground:        var(--brand-fg);
+  --accent:                   var(--bg-2);
+  --accent-foreground:        var(--fg);
   --destructive:              var(--accent-red);
   --destructive-foreground:   #ffffff;
   --input:                    var(--border);

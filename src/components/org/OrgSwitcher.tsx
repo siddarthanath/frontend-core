@@ -53,7 +53,7 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
           <DropdownMenuItem
             key={org.id}
             onSelect={() => setCurrentOrg({ id: org.id, name: org.name })}
-            className="flex items-center gap-2 focus:bg-bg-2 focus:text-fg"
+            className="flex items-center gap-2 "
           >
             <span className="flex h-5 w-5 items-center justify-center rounded bg-brand text-white text-xs font-bold shrink-0">
               {org.name.charAt(0).toUpperCase()}
@@ -67,7 +67,7 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
 
         <DropdownMenuItem
           onSelect={() => router.push("/app/settings/org?create=1")}
-          className="flex items-center gap-2 text-fg-2 focus:bg-bg-2 focus:text-fg"
+          className="flex items-center gap-2 text-fg-2 "
         >
           <Plus size={14} />
           <span>New organisation</span>
