@@ -1,10 +1,10 @@
-import { MktNav } from "@/components/layout/MktNav"
+import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 
 export default function RootPage() {
   return (
     <div className="flex flex-col min-h-screen bg-bg">
-      <MktNav />
+      <Header />
       <main className="flex-1 flex items-center justify-center p-8">
         <div className="text-center">
           <h1 className="mb-2 text-2xl font-semibold text-fg">Welcome</h1>

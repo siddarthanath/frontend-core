@@ -7,7 +7,7 @@
 // To swap to a custom backend: replace with a redirect to your own /auth/{provider} endpoint.
 // Everything above this file (pages, layouts, route protection) stays the same.
 
-import { createClient } from "@/lib/supabase/client"
+import { createClient } from "@/lib/auth/client"
 
 // Supabase supports: google | azure (Microsoft) | github | twitter | facebook | discord | ...
 // Add new providers here — no other files need to change.

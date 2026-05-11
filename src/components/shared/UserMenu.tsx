@@ -1,9 +1,8 @@
 "use client"
 
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Users, Settings, CreditCard, LogOut } from "lucide-react"
-import { signOut } from "@/lib/supabase/client"
+import { signOut } from "@/lib/auth/client"
 import { useAuthStore } from "@/stores/auth"
 import { useSubscription } from "@/lib/api/billing"
 import { PLAN_LABELS_LONG } from "@/types/billing"
@@ -79,11 +78,9 @@ export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
         <DropdownMenuSeparator />
 
         {MENU_ITEMS.map(({ href, label, icon: Icon }) => (
-          <DropdownMenuItem key={href} asChild>
-            <Link href={href} className="flex items-center gap-2">
-              <Icon size={14} className="shrink-0" />
-              {label}
-            </Link>
+          <DropdownMenuItem key={href} onSelect={() => router.push(href)} className="flex items-center gap-2 text-fg-2">
+            <Icon size={14} className="shrink-0" />
+            {label}
           </DropdownMenuItem>
         ))}
 

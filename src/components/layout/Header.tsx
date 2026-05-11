@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
 
-export function MktNav() {
+export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/90 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 md:px-6">
