@@ -16,5 +16,6 @@ export interface MemberResponse {
   role: OrgRole
   status: MembershipStatus
   invited_by: string | null
+  email: string | null
   created_at: string
 }
