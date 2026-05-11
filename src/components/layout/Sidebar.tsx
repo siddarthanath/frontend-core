@@ -22,6 +22,7 @@ export function Sidebar({ items, defaultCollapsed = false }: SidebarProps) {
   const { user } = useAuthStore()
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), [])
 
   // Before Zustand rehydrates from localStorage, use the server-read cookie value

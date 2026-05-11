@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
-import { useOrg, useUpdateOrg, useCreateOrg, useOrgs } from "@/lib/api/orgs"
+import { useOrg, useUpdateOrg, useCreateOrg } from "@/lib/api/orgs"
+import { useAutoSelectOrg } from "@/hooks/useAutoSelectOrg"
 import type { OrgResponse } from "@/types/org"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -56,18 +57,12 @@ function EditOrgForm({ org }: { org: OrgResponse }) {
 export function OrgSettingsClient() {
   const { currentOrg, setCurrentOrg } = useAuthStore()
   const { data: org, isLoading } = useOrg(currentOrg?.id ?? "")
-  const { data: orgs = [] } = useOrgs()
   const createOrg = useCreateOrg()
 
   const [newOrgName, setNewOrgName] = useState("")
   const [newOrgSlug, setNewOrgSlug] = useState("")
 
-  // Auto-select first org if none selected
-  useEffect(() => {
-    if (!currentOrg && orgs.length > 0) {
-      setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
-    }
-  }, [orgs, currentOrg, setCurrentOrg])
+  useAutoSelectOrg()
 
   async function handleCreate() {
     try {
@@ -126,14 +121,14 @@ export function OrgSettingsClient() {
             <Input
               id="new-slug"
               value={newOrgSlug}
-              onChange={(e) => setNewOrgSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+              onChange={(e) => setNewOrgSlug(e.target.value.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""))}
               placeholder="acme-inc"
               required
             />
             <p className="text-xs text-fg-3">Lowercase, alphanumeric and hyphens only.</p>
           </div>
           <div>
-            <Button type="submit" variant="outline" disabled={createOrg.isPending}>
+            <Button type="submit" variant="outline" disabled={createOrg.isPending || !newOrgName.trim() || !newOrgSlug.trim()}>
               {createOrg.isPending ? "Creating…" : "Create organisation"}
             </Button>
           </div>

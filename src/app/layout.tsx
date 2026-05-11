@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
              this never fires on a healthy page load.
         */}
         <Script
+          id="bfcache-fix"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: `window.addEventListener('pageshow',function(e){if(e.persisted)window.location.reload()});window.__reactReady=false;setTimeout(function(){if(!window.__reactReady)window.location.reload()},2000)` }}
         />

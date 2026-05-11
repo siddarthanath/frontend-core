@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { UserPlus, Building2 } from "lucide-react"
 import { useAuthStore } from "@/stores/auth"
-import { useOrgMembers, useOrgs } from "@/lib/api/orgs"
+import { useOrgMembers } from "@/lib/api/orgs"
+import { useAutoSelectOrg } from "@/hooks/useAutoSelectOrg"
 import type { OrgRole } from "@/types/org"
 import { Button } from "@/components/ui/button"
 import { MemberList } from "@/components/org/MemberList"
@@ -11,17 +12,11 @@ import { InviteModal } from "@/components/org/InviteModal"
 import { EmptyState } from "@/components/shared/EmptyState"
 
 export function MembersPageClient() {
-  const { currentOrg, user, setCurrentOrg } = useAuthStore()
-  const { data: orgs = [] } = useOrgs()
+  const { currentOrg, user } = useAuthStore()
   const { data: members = [] } = useOrgMembers(currentOrg?.id ?? "")
   const [inviteOpen, setInviteOpen] = useState(false)
 
-  // Auto-select first org if none selected
-  useEffect(() => {
-    if (!currentOrg && orgs.length > 0) {
-      setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
-    }
-  }, [orgs, currentOrg, setCurrentOrg])
+  useAutoSelectOrg()
 
   const currentMember = members.find((m) => m.user_id === user?.id)
   const currentUserRole: OrgRole = currentMember?.role ?? "member"

@@ -35,7 +35,7 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
           <span
             className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-brand text-white text-xs font-bold"
           >
-            {currentOrg ? currentOrg.name[0].toUpperCase() : "?"}
+            {currentOrg ? currentOrg.name.charAt(0).toUpperCase() : "?"}
           </span>
           {!collapsed && (
             <>
@@ -56,7 +56,7 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
             className="flex items-center gap-2"
           >
             <span className="flex h-5 w-5 items-center justify-center rounded bg-brand text-white text-xs font-bold shrink-0">
-              {org.name[0].toUpperCase()}
+              {org.name.charAt(0).toUpperCase()}
             </span>
             <span className="flex-1 truncate">{org.name}</span>
             {currentOrg?.id === org.id && <Check size={14} className="text-brand shrink-0" />}
