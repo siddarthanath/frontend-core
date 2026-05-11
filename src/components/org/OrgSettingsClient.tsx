@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
 import { useOrg, useUpdateOrg, useCreateOrg, useOrgs } from "@/lib/api/orgs"
+import type { OrgResponse } from "@/types/org"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,27 +12,10 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { EmptyState } from "@/components/shared/EmptyState"
 import { Building2 } from "lucide-react"
 
-export function OrgSettingsClient() {
-  const { currentOrg, setCurrentOrg } = useAuthStore()
-  const { data: org, isLoading } = useOrg(currentOrg?.id ?? "")
-  const { data: orgs = [] } = useOrgs()
-  const updateOrg = useUpdateOrg(currentOrg?.id ?? "")
-  const createOrg = useCreateOrg()
-
-  const [name, setName] = useState("")
-  const [newOrgName, setNewOrgName] = useState("")
-  const [newOrgSlug, setNewOrgSlug] = useState("")
-
-  useEffect(() => {
-    if (org) setName(org.name)
-  }, [org])
-
-  // Auto-select first org if none selected
-  useEffect(() => {
-    if (!currentOrg && orgs.length > 0) {
-      setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
-    }
-  }, [orgs, currentOrg, setCurrentOrg])
+function EditOrgForm({ org }: { org: OrgResponse }) {
+  const { setCurrentOrg } = useAuthStore()
+  const updateOrg = useUpdateOrg(org.id)
+  const [name, setName] = useState(org.name)
 
   async function handleUpdate() {
     try {
@@ -42,6 +26,48 @@ export function OrgSettingsClient() {
       toast.error("Failed to update organisation")
     }
   }
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); void handleUpdate() }} className="flex flex-col gap-4">
+      <h2 className="text-sm font-medium text-fg">Edit organisation</h2>
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="org-name">Name</Label>
+        <Input
+          id="org-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <Label>Slug</Label>
+        <Input value={org.slug} disabled className="text-fg-3" />
+        <p className="text-xs text-fg-3">Slug cannot be changed after creation.</p>
+      </div>
+      <div>
+        <Button type="submit" disabled={updateOrg.isPending || name === org.name}>
+          {updateOrg.isPending ? "Saving…" : "Save changes"}
+        </Button>
+      </div>
+    </form>
+  )
+}
+
+export function OrgSettingsClient() {
+  const { currentOrg, setCurrentOrg } = useAuthStore()
+  const { data: org, isLoading } = useOrg(currentOrg?.id ?? "")
+  const { data: orgs = [] } = useOrgs()
+  const createOrg = useCreateOrg()
+
+  const [newOrgName, setNewOrgName] = useState("")
+  const [newOrgSlug, setNewOrgSlug] = useState("")
+
+  // Auto-select first org if none selected
+  useEffect(() => {
+    if (!currentOrg && orgs.length > 0) {
+      setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
+    }
+  }, [orgs, currentOrg, setCurrentOrg])
 
   async function handleCreate() {
     try {
@@ -64,35 +90,14 @@ export function OrgSettingsClient() {
 
       {/* Edit current org */}
       {currentOrg ? (
-        isLoading ? (
+        isLoading || !org ? (
           <div className="flex flex-col gap-3">
             <Skeleton className="h-5 w-32" />
             <Skeleton className="h-10 w-full" />
             <Skeleton className="h-9 w-24" />
           </div>
         ) : (
-          <form onSubmit={(e) => { e.preventDefault(); void handleUpdate() }} className="flex flex-col gap-4">
-            <h2 className="text-sm font-medium text-fg">Edit organisation</h2>
-            <div className="flex flex-col gap-1.5">
-              <Label htmlFor="org-name">Name</Label>
-              <Input
-                id="org-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="flex flex-col gap-1.5">
-              <Label>Slug</Label>
-              <Input value={org?.slug ?? ""} disabled className="text-fg-3" />
-              <p className="text-xs text-fg-3">Slug cannot be changed after creation.</p>
-            </div>
-            <div>
-              <Button type="submit" disabled={updateOrg.isPending || name === org?.name}>
-                {updateOrg.isPending ? "Saving…" : "Save changes"}
-              </Button>
-            </div>
-          </form>
+          <EditOrgForm key={org.id} org={org} />
         )
       ) : (
         <EmptyState

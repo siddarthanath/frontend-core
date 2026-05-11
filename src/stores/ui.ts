@@ -17,7 +17,15 @@ export const useUiStore = create<UIState>()(
   persist(
     (set, get) => ({
       sidebarCollapsed: false,
-      toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+      // Cookie mirrors localStorage so the server can read the correct initial
+      // state on refresh — prevents the expanded→collapsed flash on first paint.
+      toggleSidebar: () => set((s) => {
+        const next = !s.sidebarCollapsed
+        if (typeof document !== "undefined") {
+          document.cookie = `sidebar_collapsed=${next};path=/;max-age=31536000`
+        }
+        return { sidebarCollapsed: next }
+      }),
 
       openModals: [],
       openModal: (key) =>

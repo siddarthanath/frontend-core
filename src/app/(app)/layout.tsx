@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { AppShell } from "@/components/layout/AppShell"
@@ -16,10 +17,13 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   if (error || !user) redirect("/login")
 
+  const cookieStore = await cookies()
+  const defaultCollapsed = cookieStore.get("sidebar_collapsed")?.value === "true"
+
   return (
     <>
       <HydrateAuthStore user={user} />
-      <AppShell>{children}</AppShell>
+      <AppShell defaultCollapsed={defaultCollapsed}>{children}</AppShell>
     </>
   )
 }
