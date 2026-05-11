@@ -1,45 +1,19 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth"
 import { useCreateCheckout } from "@/lib/api/billing"
 import { PricingCard } from "@/components/billing/PricingCard"
-import type { Plan } from "@/types/billing"
-
-const PLANS: {
-  plan: Plan
-  price: string
-  description: string
-  features: string[]
-  featured: boolean
-}[] = [
-  {
-    plan: "free",
-    price: "$0",
-    description: "For individuals and small teams getting started.",
-    features: ["Up to 3 members", "Basic org management", "Community support"],
-    featured: false,
-  },
-  {
-    plan: "pro",
-    price: "$29",
-    description: "For growing teams that need more power.",
-    features: ["Unlimited members", "Priority support", "Advanced analytics", "API access"],
-    featured: true,
-  },
-  {
-    plan: "enterprise",
-    price: "$99",
-    description: "For large organisations with advanced needs.",
-    features: ["Everything in Pro", "SSO / SAML", "Custom contracts", "Dedicated support"],
-    featured: false,
-  },
-]
+import { PLAN_CONFIGS } from "@/types/billing"
+import type { BillingPeriod, Plan } from "@/types/billing"
 
 export default function PickPlanPage() {
   const router = useRouter()
   const { currentOrg } = useAuthStore()
+  const [period, setPeriod] = useState<BillingPeriod>("monthly")
   const createCheckout = useCreateCheckout(currentOrg?.id ?? "")
 
   async function handleUpgrade(plan: Plan) {
@@ -47,9 +21,14 @@ export default function PickPlanPage() {
       router.push("/app/dashboard")
       return
     }
+    if (plan === "enterprise") {
+      window.location.assign("mailto:hello@example.com?subject=Enterprise enquiry")
+      return
+    }
     try {
       const { checkout_url } = await createCheckout.mutateAsync({
         plan,
+        period,
         success_url: `${window.location.origin}/app/dashboard`,
         cancel_url: `${window.location.origin}/onboarding/pick-plan`,
       })
@@ -60,7 +39,7 @@ export default function PickPlanPage() {
   }
 
   return (
-    <div className="w-full max-w-3xl flex flex-col gap-8">
+    <div className="w-full max-w-4xl flex flex-col gap-8">
       {/* Step indicator */}
       <div className="flex flex-col items-center gap-3">
         <div className="flex items-center gap-2">
@@ -76,17 +55,45 @@ export default function PickPlanPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {PLANS.map(({ plan, price, description, features, featured }) => (
+      {/* Period toggle */}
+      <div className="flex justify-center">
+        <div className="flex items-center gap-1 rounded-lg bg-bg-2 border border-border p-1">
+          <button
+            onClick={() => setPeriod("monthly")}
+            className={cn(
+              "px-4 py-1.5 rounded-md text-sm font-medium transition-colors",
+              period === "monthly" ? "bg-surface text-fg shadow-sm" : "text-fg-2 hover:text-fg"
+            )}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setPeriod("yearly")}
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm font-medium transition-colors",
+              period === "yearly" ? "bg-surface text-fg shadow-sm" : "text-fg-2 hover:text-fg"
+            )}
+          >
+            Yearly
+            <span className={cn("text-xs", period === "yearly" ? "text-brand" : "text-fg-3")}>
+              save 10%
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {PLAN_CONFIGS.map(({ plan, monthlyPrice, yearlyPrice, description, features, featured, contactUs }) => (
           <PricingCard
             key={plan}
             plan={plan}
-            price={price}
+            price={period === "yearly" ? yearlyPrice : monthlyPrice}
             description={description}
             features={features}
             isFeatured={featured}
             isCurrentPlan={false}
-            onUpgrade={() => handleUpgrade(plan)}
+            showYearlyBanner={period === "yearly"}
+            onUpgrade={contactUs ? () => handleUpgrade("enterprise") : () => handleUpgrade(plan)}
             loading={createCheckout.isPending}
           />
         ))}

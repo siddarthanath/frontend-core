@@ -10,6 +10,7 @@ interface PlanBadgeProps {
 const PLAN_STYLES: Record<Plan, string> = {
   free: "bg-bg-2 text-fg-2",
   pro: "bg-brand-dim text-brand-fg",
+  max: "bg-purple-500/10 text-purple-500",
   enterprise: "bg-[hsl(var(--color-warning)/0.15)] text-[hsl(var(--color-warning))]",
 }
 

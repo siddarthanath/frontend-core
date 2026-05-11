@@ -10,6 +10,7 @@ interface PricingCardProps {
   features: string[]
   isCurrentPlan: boolean
   isFeatured?: boolean
+  showYearlyBanner?: boolean
   onUpgrade?: () => void
   loading?: boolean
 }
@@ -21,23 +22,35 @@ export function PricingCard({
   features,
   isCurrentPlan,
   isFeatured = false,
+  showYearlyBanner = false,
   onUpgrade,
   loading = false,
 }: PricingCardProps) {
   const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1)
+  const isEnterprise = plan === "enterprise"
+  const isFree = plan === "free"
 
   return (
     <div
       className={cn(
-        "flex flex-col rounded-xl border p-6 gap-5",
+        "relative flex flex-col rounded-xl border p-6 gap-5 overflow-hidden",
         isFeatured ? "border-brand bg-brand-dim/20" : "border-border bg-surface"
       )}
     >
+      {/* Yearly 10% off ribbon */}
+      {showYearlyBanner && !isFree && !isEnterprise && (
+        <div className="absolute top-0 right-0 w-24 h-24 overflow-hidden pointer-events-none">
+          <div className="absolute top-5 -right-5 rotate-45 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-8 py-0.5 text-center">
+            10% off
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-1">
         <span className="text-sm font-semibold text-fg uppercase tracking-wide">{planLabel}</span>
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-bold text-fg">{price}</span>
-          {plan !== "free" && <span className="text-sm text-fg-3">/month</span>}
+          {!isFree && !isEnterprise && <span className="text-sm text-fg-3">/mo</span>}
         </div>
         <p className="text-sm text-fg-2">{description}</p>
       </div>
@@ -54,10 +67,16 @@ export function PricingCard({
       <Button
         className="mt-auto w-full"
         variant={isFeatured ? "default" : "outline"}
-        disabled={isCurrentPlan || loading}
+        disabled={isCurrentPlan || (!isEnterprise && !onUpgrade) || loading}
         onClick={onUpgrade}
       >
-        {isCurrentPlan ? "Current plan" : plan === "free" ? "Continue for free" : `Upgrade to ${planLabel}`}
+        {isCurrentPlan
+          ? "Current plan"
+          : isEnterprise
+          ? "Contact us"
+          : isFree
+          ? "Continue for free"
+          : `Upgrade to ${planLabel}`}
       </Button>
     </div>
   )
