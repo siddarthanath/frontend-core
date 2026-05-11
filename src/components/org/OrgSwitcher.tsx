@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, ChevronsUpDown, Plus } from "lucide-react"
+import { Building2, Check, ChevronsUpDown, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/stores/auth"
 import { useOrgs } from "@/lib/api/orgs"
@@ -27,19 +27,16 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm w-full",
-            "text-fg hover:bg-bg-2 transition-colors",
-            collapsed && "justify-center px-1.5"
+            "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm w-full transition-colors",
+            "text-fg-2 hover:bg-bg-2 hover:text-fg",
+            collapsed && "justify-center"
           )}
+          title={collapsed ? (currentOrg?.name ?? "Select org") : undefined}
         >
-          <span
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-brand text-white text-xs font-bold"
-          >
-            {currentOrg ? currentOrg.name.charAt(0).toUpperCase() : "?"}
-          </span>
+          <Building2 size={16} className="shrink-0" />
           {!collapsed && (
             <>
-              <span className="flex-1 truncate text-left font-medium">
+              <span className="flex-1 truncate text-left">
                 {currentOrg?.name ?? "Select org"}
               </span>
               <ChevronsUpDown size={14} className="text-fg-3 shrink-0" />
@@ -48,7 +45,7 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
         </button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56" align="start">
+      <DropdownMenuContent className="w-56" align="start" side="top">
         {orgs.map((org) => (
           <DropdownMenuItem
             key={org.id}

@@ -119,6 +119,8 @@
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
   --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+
+  --accent:    rgba(255,255,255,0.08);
 }
 
 /* ─── shadcn variable mapping ────────────────────────────── */
@@ -137,8 +139,8 @@
   --secondary-foreground:     var(--fg);
   --muted:                    var(--bg-2);
   --muted-foreground:         var(--fg-3);
-  --accent:                   var(--brand-dim);
-  --accent-foreground:        var(--brand-fg);
+  --accent:                   var(--bg-2);
+  --accent-foreground:        var(--fg);
   --destructive:              var(--accent-red);
   --destructive-foreground:   #ffffff;
   --input:                    var(--border);

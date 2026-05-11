@@ -7,10 +7,11 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createClient } from "@/lib/supabase/client"
+import { createClient } from "@/lib/auth/client"
 import { GoogleButton, MicrosoftButton } from "@/components/auth/OAuthButton"
 
 const schema = z.object({
+  full_name: z.string().min(1, "Enter your name"),
   email: z.string().email("Enter a valid email"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 })
@@ -38,6 +39,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
       password: data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
+        data: { full_name: data.full_name },
       },
     })
     if (error) {
@@ -49,6 +51,13 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-1.5">
+        <Label htmlFor="full_name">Full name</Label>
+        <Input id="full_name" type="text" autoComplete="name" {...register("full_name")} />
+        {errors.full_name && (
+          <p className="text-sm text-error">{errors.full_name.message}</p>
+        )}
+      </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" autoComplete="email" {...register("email")} />

@@ -6,15 +6,16 @@ import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { NAV_ITEMS } from "@/types/nav"
+import { useAuthStore } from "@/stores/auth"
+import { OrgSwitcher } from "@/components/org/OrgSwitcher"
+import { UserMenu } from "@/components/shared/UserMenu"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
-import type { NavItem } from "@/types/nav"
 
-interface MobileHeaderProps {
-  items: NavItem[]
-}
-
-export function MobileHeader({ items }: MobileHeaderProps) {
+export function MobileHeader() {
+  const items = NAV_ITEMS
   const pathname = usePathname()
+  const { user, displayName } = useAuthStore()
 
   return (
     <header
@@ -30,49 +31,63 @@ export function MobileHeader({ items }: MobileHeaderProps) {
             <Menu size={18} />
           </button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0 bg-surface border-border">
-          <div className="flex h-full flex-col">
-            <div
-              className="flex items-center gap-2 px-4 border-b border-border shrink-0"
-              style={{ height: "var(--header-height)" }}
-            >
-              <Image src="/vercel.svg" alt="Logo" width={18} height={18} className="dark:invert" />
-              <span className="text-sm font-semibold text-fg">Template</span>
-            </div>
-            <nav className="flex-1 overflow-y-auto p-2 flex flex-col gap-0.5">
-              {items.map((item) => {
-                const active = pathname === item.href || pathname.startsWith(item.href + "/")
-                const Icon = item.icon
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors",
-                      active
-                        ? "bg-brand-dim text-brand-fg font-medium"
-                        : "text-fg-2 hover:bg-bg-2 hover:text-fg"
-                    )}
-                  >
-                    <Icon size={16} className="shrink-0" />
-                    <span>{item.label}</span>
-                    {item.badge && (
-                      <span className="ml-auto text-xs bg-brand-dim text-brand-fg px-1.5 py-0.5 rounded-full">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                )
-              })}
-            </nav>
+        <SheetContent side="left" className="w-64 p-0 bg-surface border-border flex flex-col">
+          {/* Logo */}
+          <div
+            className="flex items-center gap-2 px-4 border-b border-border shrink-0"
+            style={{ height: "var(--header-height)" }}
+          >
+            <Image src="/vercel.svg" alt="Logo" width={16} height={16} className="dark:invert" />
+            <span className="text-sm font-semibold text-fg">Template</span>
+          </div>
+
+          {/* Nav items */}
+          <nav className="flex-1 overflow-y-auto p-2 flex flex-col gap-0.5">
+            {items.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(item.href + "/")
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-colors",
+                    active
+                      ? "bg-brand-dim text-brand-fg font-medium"
+                      : "text-fg-2 hover:bg-bg-2 hover:text-fg"
+                  )}
+                >
+                  <Icon size={16} className="shrink-0" />
+                  <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="ml-auto text-xs bg-brand-dim text-brand-fg px-1.5 py-0.5 rounded-full">
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Org switcher — above footer border */}
+          <div className="px-2 py-1">
+            <OrgSwitcher collapsed={false} />
+          </div>
+
+          {/* User row */}
+          <div className="border-t border-border">
+            <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed={false} />
           </div>
         </SheetContent>
       </Sheet>
 
+      {/* Centre: logo */}
       <Link href="/app/dashboard" className="flex items-center gap-1.5">
-        <Image src="/vercel.svg" alt="Logo" width={18} height={18} className="dark:invert" />
+        <Image src="/vercel.svg" alt="Logo" width={16} height={16} className="dark:invert" />
         <span className="text-sm font-semibold text-fg">Template</span>
       </Link>
+
+      {/* Right: theme toggle */}
       <ThemeToggle />
     </header>
   )

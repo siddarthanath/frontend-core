@@ -10,6 +10,7 @@ interface OrgContext {
 
 interface AuthState {
   user: User | null
+  displayName: string | null
   setUser: (user: User | null) => void
 
   currentOrg: OrgContext | null
@@ -20,7 +21,12 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>()((set) => ({
   user: null,
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  displayName: null,
+  setUser: (user) => set({
+    user,
+    isAuthenticated: !!user,
+    displayName: (user?.user_metadata?.full_name as string | undefined)?.split(" ")[0] ?? null,
+  }),
 
   currentOrg: null,
   setCurrentOrg: (org) => set({ currentOrg: org }),

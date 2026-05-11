@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Skeleton } from "@/components/ui/skeleton"
-import { EmptyState } from "@/components/shared/EmptyState"
-import { Building2 } from "lucide-react"
+import { RequireOrg } from "@/components/shared/RequireOrg"
 
 function EditOrgForm({ org }: { org: OrgResponse }) {
   const { setCurrentOrg } = useAuthStore()
@@ -84,8 +83,8 @@ export function OrgSettingsClient() {
       </div>
 
       {/* Edit current org */}
-      {currentOrg ? (
-        isLoading || !org ? (
+      <RequireOrg description="Create one below or select from the sidebar.">
+        {isLoading || !org ? (
           <div className="flex flex-col gap-3">
             <Skeleton className="h-5 w-32" />
             <Skeleton className="h-10 w-full" />
@@ -93,14 +92,8 @@ export function OrgSettingsClient() {
           </div>
         ) : (
           <EditOrgForm key={org.id} org={org} />
-        )
-      ) : (
-        <EmptyState
-          icon={<Building2 size={32} />}
-          title="No organisation selected"
-          description="Create one below or select from the sidebar."
-        />
-      )}
+        )}
+      </RequireOrg>
 
       {/* Create new org */}
       <div className="border-t border-border pt-8">

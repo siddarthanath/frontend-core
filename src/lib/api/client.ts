@@ -1,5 +1,5 @@
 import ky, { type KyResponse } from "ky";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "@/lib/auth/client";
 
 /** Shape every backend error is normalised to before reaching query hooks. */
 export interface ApiError {

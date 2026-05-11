@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { createClient } from "@/lib/supabase/client"
+import { createClient } from "@/lib/auth/client"
 
 const schema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters"),

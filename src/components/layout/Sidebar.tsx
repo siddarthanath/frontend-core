@@ -6,27 +6,27 @@ import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { NavItem } from "@/types/nav"
+import { NAV_ITEMS } from "@/types/nav"
 import { useUiStore } from "@/stores/ui"
 import { useAuthStore } from "@/stores/auth"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
+import { UserMenu } from "@/components/shared/UserMenu"
 import { OrgSwitcher } from "@/components/org/OrgSwitcher"
 
+
 interface SidebarProps {
-  items: NavItem[]
   defaultCollapsed?: boolean
 }
 
-export function Sidebar({ items, defaultCollapsed = false }: SidebarProps) {
+export function Sidebar({ defaultCollapsed = false }: SidebarProps) {
+  const items = NAV_ITEMS
   const { sidebarCollapsed, toggleSidebar } = useUiStore()
-  const { user } = useAuthStore()
+  const { user, displayName } = useAuthStore()
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setMounted(true), [])
 
-  // Before Zustand rehydrates from localStorage, use the server-read cookie value
-  // so the sidebar width is correct on the first paint with no flash.
   const collapsed = mounted ? sidebarCollapsed : defaultCollapsed
 
   return (
@@ -34,32 +34,44 @@ export function Sidebar({ items, defaultCollapsed = false }: SidebarProps) {
       className="hidden lg:flex flex-col border-r border-border bg-surface transition-all duration-200 shrink-0"
       style={{ width: collapsed ? "var(--sidebar-collapsed)" : "var(--sidebar-width)" }}
     >
-      {/* Logo + collapse toggle */}
+      {/* Header */}
       <div
-        className="flex items-center justify-between px-3 border-b border-border shrink-0"
+        className="flex items-center border-b border-border shrink-0 px-2.5"
         style={{ height: "var(--header-height)" }}
       >
-        {!collapsed && (
-          <Link href="/app/dashboard" className="flex items-center gap-2">
-            <Image src="/vercel.svg" alt="Logo" width={20} height={20} className="dark:invert" />
-            <span className="text-sm font-semibold text-fg">Template</span>
-          </Link>
+        {collapsed ? (
+          /* Collapsed: logo swaps to expand button on hover */
+          <div className="group/logo flex flex-1 items-center justify-center">
+            <Link href="/app/dashboard" className="flex items-center group-hover/logo:hidden">
+              <Image src="/vercel.svg" alt="Logo" width={16} height={16} className="dark:invert" />
+            </Link>
+            <button
+              onClick={toggleSidebar}
+              className="hidden group-hover/logo:flex h-7 w-7 items-center justify-center rounded-md text-fg-2 hover:bg-bg-2 transition-colors"
+              aria-label="Expand sidebar"
+            >
+              <PanelLeftOpen size={15} />
+            </button>
+          </div>
+        ) : (
+          /* Expanded: logo + name on left, theme + collapse on right */
+          <>
+            <Link href="/app/dashboard" className="flex items-center gap-2 flex-1 min-w-0">
+              <Image src="/vercel.svg" alt="Logo" width={16} height={16} className="dark:invert shrink-0" />
+              <span className="text-sm font-semibold text-fg truncate">Template</span>
+            </Link>
+            <div className="flex items-center gap-0.5 shrink-0">
+              <ThemeToggle />
+              <button
+                onClick={toggleSidebar}
+                className="flex h-7 w-7 items-center justify-center rounded-md text-fg-2 hover:bg-bg-2 transition-colors"
+                aria-label="Collapse sidebar"
+              >
+                <PanelLeftClose size={15} />
+              </button>
+            </div>
+          </>
         )}
-        <button
-          onClick={toggleSidebar}
-          className={cn(
-            "flex h-7 w-7 items-center justify-center rounded-md text-fg-2 hover:bg-bg-2 transition-colors",
-            collapsed && "mx-auto"
-          )}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {collapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}
-        </button>
-      </div>
-
-      {/* Org switcher */}
-      <div className="px-2 py-2 border-b border-border">
-        <OrgSwitcher collapsed={collapsed} />
       </div>
 
       {/* Nav items */}
@@ -96,18 +108,22 @@ export function Sidebar({ items, defaultCollapsed = false }: SidebarProps) {
         })}
       </nav>
 
-      {/* Footer: theme toggle + user email */}
-      <div
-        className={cn(
-          "p-2 border-t border-border flex items-center gap-2 shrink-0",
-          collapsed && "justify-center"
-        )}
-      >
-        <ThemeToggle />
-        {!collapsed && user?.email && (
-          <span className="text-xs text-fg-3 truncate">{user.email}</span>
-        )}
+      {/* Org switcher — above the border */}
+      <div className={cn("px-2 py-1", collapsed && "flex justify-center")}>
+        <OrgSwitcher collapsed={collapsed} />
       </div>
+
+      {/* Footer */}
+      {collapsed ? (
+        <div className="border-t border-border shrink-0 flex flex-col items-center py-2 gap-1">
+          <ThemeToggle />
+          <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed />
+        </div>
+      ) : (
+        <div className="border-t border-border shrink-0">
+          <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed={false} />
+        </div>
+      )}
     </aside>
   )
 }
