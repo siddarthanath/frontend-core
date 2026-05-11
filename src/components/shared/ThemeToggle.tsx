@@ -22,8 +22,9 @@ export function ThemeToggle() {
         <button
           className="flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-bg-2 text-fg-2"
           aria-label="Toggle theme"
+          suppressHydrationWarning
         >
-          <Icon size={15} />
+          <Icon size={15} suppressHydrationWarning />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

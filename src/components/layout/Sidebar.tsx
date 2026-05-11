@@ -9,6 +9,7 @@ import type { NavItem } from "@/types/nav"
 import { useUiStore } from "@/stores/ui"
 import { useAuthStore } from "@/stores/auth"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
+import { OrgSwitcher } from "@/components/org/OrgSwitcher"
 
 interface SidebarProps {
   items: NavItem[]
@@ -45,6 +46,11 @@ export function Sidebar({ items }: SidebarProps) {
         >
           {sidebarCollapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}
         </button>
+      </div>
+
+      {/* Org switcher */}
+      <div className="px-2 py-2 border-b border-border">
+        <OrgSwitcher collapsed={sidebarCollapsed} />
       </div>
 
       {/* Nav items */}
