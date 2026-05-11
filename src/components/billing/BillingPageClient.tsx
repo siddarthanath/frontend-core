@@ -57,7 +57,7 @@ export function BillingPageClient() {
         success_url: `${window.location.origin}/app/settings/billing?success=1`,
         cancel_url: `${window.location.origin}/app/settings/billing`,
       })
-      window.location.href = checkout_url
+      window.location.assign(checkout_url)
     } catch {
       toast.error("Failed to start checkout")
     }

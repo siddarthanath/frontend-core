@@ -11,7 +11,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script
           // Bfcache fix: reload on back/forward restore so React re-initialises.
           dangerouslySetInnerHTML={{ __html: `window.addEventListener('pageshow',function(e){if(e.persisted)window.location.reload()})` }}
