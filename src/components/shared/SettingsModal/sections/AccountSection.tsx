@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { signOut } from "@/lib/auth/client"
 import { useDeleteAccount } from "@/lib/api/user"
+import { useAuthStore } from "@/stores/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,12 +16,14 @@ export function AccountSection() {
   const router = useRouter()
   const [confirmation, setConfirmation] = useState("")
   const deleteAccount = useDeleteAccount()
+  const { setUser } = useAuthStore()
 
   async function handleDelete() {
     if (confirmation !== CONFIRMATION_PHRASE) return
     try {
       await deleteAccount.mutateAsync()
       await signOut()
+      setUser(null)
       router.push("/")
     } catch {
       toast.error("Failed to delete account — contact support if this persists")
