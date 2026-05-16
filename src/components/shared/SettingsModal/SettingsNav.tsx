@@ -1,14 +1,16 @@
 "use client"
 
-import { User, CreditCard, Shield, Trash2 } from "lucide-react"
+import { User, CreditCard, Flag, KeyRound, Shield, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { SettingsSection } from "@/lib/modal-keys"
 
 const NAV_ITEMS: { section: SettingsSection; label: string; icon: React.ElementType }[] = [
-  { section: "general",  label: "General",  icon: User },
-  { section: "billing",  label: "Billing",  icon: CreditCard },
-  { section: "security", label: "Security", icon: Shield },
-  { section: "account",  label: "Account",  icon: Trash2 },
+  { section: "general",  label: "General",       icon: User },
+  { section: "billing",  label: "Billing",       icon: CreditCard },
+  { section: "flags",    label: "Feature Flags", icon: Flag },
+  { section: "api-keys", label: "API Keys",      icon: KeyRound },
+  { section: "security", label: "Security",      icon: Shield },
+  { section: "account",  label: "Account",       icon: Trash2 },
 ]
 
 interface SettingsNavProps {

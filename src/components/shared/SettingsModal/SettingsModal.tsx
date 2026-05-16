@@ -7,16 +7,20 @@ import { useUiStore } from "@/stores/ui"
 import { SettingsNav } from "./SettingsNav"
 import { GeneralSection } from "./sections/GeneralSection"
 import { BillingSection } from "./sections/BillingSection"
+import { FlagsSection } from "./sections/FlagsSection"
+import { ApiKeysSection } from "./sections/ApiKeysSection"
 import { SecuritySection } from "./sections/SecuritySection"
 import { AccountSection } from "./sections/AccountSection"
 import type { SettingsSection } from "@/lib/modal-keys"
 
-const VALID_SECTIONS: SettingsSection[] = ["general", "billing", "security", "account"]
+const VALID_SECTIONS: SettingsSection[] = ["general", "billing", "flags", "api-keys", "security", "account"]
 
 function SectionContent({ section }: { section: SettingsSection }) {
   switch (section) {
     case "general":  return <GeneralSection />
     case "billing":  return <BillingSection />
+    case "flags":    return <FlagsSection />
+    case "api-keys": return <ApiKeysSection />
     case "security": return <SecuritySection />
     case "account":  return <AccountSection />
   }
