@@ -2,6 +2,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
+import type { SettingsSection } from "@/lib/modal-keys"
 
 interface UIState {
   sidebarCollapsed: boolean
@@ -11,6 +12,12 @@ interface UIState {
   openModal: (key: string) => void
   closeModal: (key: string) => void
   isModalOpen: (key: string) => boolean
+
+  // Settings modal — section is tracked separately from the generic modal open state
+  // so deep links like openSettings("billing") work without extra state threading.
+  settingsSection: SettingsSection
+  openSettings: (section?: SettingsSection) => void
+  closeSettings: () => void
 }
 
 export const useUiStore = create<UIState>()(
@@ -37,6 +44,17 @@ export const useUiStore = create<UIState>()(
       closeModal: (key) =>
         set((s) => ({ openModals: s.openModals.filter((k) => k !== key) })),
       isModalOpen: (key) => get().openModals.includes(key),
+
+      settingsSection: "general",
+      openSettings: (section = "general") =>
+        set((s) => ({
+          settingsSection: section,
+          openModals: s.openModals.includes("settings")
+            ? s.openModals
+            : [...s.openModals, "settings"],
+        })),
+      closeSettings: () =>
+        set((s) => ({ openModals: s.openModals.filter((k) => k !== "settings") })),
     }),
     {
       name: "ui-store",

@@ -31,10 +31,11 @@ export function PricingCard({
   const isFree = plan === "free"
 
   return (
+    <div className="flex flex-col">
     <div
       className={cn(
         "relative flex flex-col rounded-xl border p-6 gap-5 overflow-hidden",
-        isFeatured ? "border-brand bg-brand-dim/20" : "border-border bg-surface"
+        isFeatured ? "border-brand bg-brand-dim/20 rounded-b-none border-b-0" : "border-border bg-surface"
       )}
     >
       {/* Yearly 10% off ribbon */}
@@ -78,6 +79,13 @@ export function PricingCard({
           ? "Continue for free"
           : `Upgrade to ${planLabel}`}
       </Button>
+    </div>
+
+    {isFeatured && (
+      <div className="flex items-center justify-center rounded-b-xl border border-t-0 border-brand bg-brand py-1.5">
+        <span className="text-[11px] font-bold tracking-widest uppercase text-brand-on">Most Popular</span>
+      </div>
+    )}
     </div>
   )
 }

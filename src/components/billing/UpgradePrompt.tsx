@@ -1,14 +1,13 @@
-import Link from "next/link"
 import { Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useAuthStore } from "@/stores/auth"
+import { useUiStore } from "@/stores/ui"
 
 interface UpgradePromptProps {
   message?: string
 }
 
 export function UpgradePrompt({ message = "This feature requires a Pro plan." }: UpgradePromptProps) {
-  const { currentOrg } = useAuthStore()
+  const { openSettings } = useUiStore()
 
   return (
     <div className="flex flex-col items-center gap-3 rounded-xl border border-border bg-surface p-6 text-center">
@@ -19,11 +18,9 @@ export function UpgradePrompt({ message = "This feature requires a Pro plan." }:
         <p className="text-sm font-medium text-fg">{message}</p>
         <p className="text-xs text-fg-3">Upgrade your plan to unlock this feature.</p>
       </div>
-      {currentOrg && (
-        <Button size="sm" asChild>
-          <Link href="/app/settings/billing">View plans</Link>
-        </Button>
-      )}
+      <Button size="sm" onClick={() => openSettings("billing")}>
+        View plans
+      </Button>
     </div>
   )
 }
