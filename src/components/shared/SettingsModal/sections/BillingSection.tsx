@@ -19,7 +19,7 @@ export function BillingSection() {
   async function handlePortal() {
     try {
       const { portal_url } = await createPortal.mutateAsync({ return_url: window.location.href })
-      window.open(portal_url, "_blank")
+      window.location.assign(portal_url)
     } catch {
       toast.error("Failed to open billing portal")
     }
@@ -66,7 +66,7 @@ export function BillingSection() {
             <div className="text-right">
               <span className="text-xs text-fg-3">Renews </span>
               <span className="text-xs text-fg">
-                {new Date(subscription.current_period_end).toLocaleDateString()}
+                {new Date(subscription.current_period_end).toLocaleDateString("en-GB")}
               </span>
             </div>
           )}

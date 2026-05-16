@@ -37,11 +37,13 @@ export function SettingsModal() {
 
   // Sync URL hash with modal state
   useEffect(() => {
+    const url = new URL(window.location.href)
     if (open) {
-      history.replaceState(null, "", `${window.location.pathname}#settings-${settingsSection}`)
+      url.hash = `settings-${settingsSection}`
     } else {
-      history.replaceState(null, "", window.location.pathname)
+      url.hash = ""
     }
+    history.replaceState(null, "", url.pathname + url.search + (url.hash || ""))
   }, [open, settingsSection])
 
   // Close on Escape
