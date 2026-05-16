@@ -1,27 +1,28 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
 import { useCurrentUser, useUpdateProfile } from "@/lib/api/user"
+import type { UserMeResponse } from "@/lib/api/user"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 export function GeneralSection() {
-  const { user } = useAuthStore()
   const { data: me } = useCurrentUser()
+
+  if (!me) return null
+
+  return <GeneralForm me={me} />
+}
+
+function GeneralForm({ me }: { me: UserMeResponse }) {
+  const { user } = useAuthStore()
   const updateProfile = useUpdateProfile()
 
-  const [firstName, setFirstName] = useState(me?.first_name ?? "")
-  const [lastName, setLastName] = useState(me?.last_name ?? "")
-
-  useEffect(() => {
-    if (me) {
-      setFirstName(me.first_name ?? "")
-      setLastName(me.last_name ?? "")
-    }
-  }, [me])
+  const [firstName, setFirstName] = useState(me.first_name ?? "")
+  const [lastName, setLastName] = useState(me.last_name ?? "")
 
   async function handleSave() {
     try {
