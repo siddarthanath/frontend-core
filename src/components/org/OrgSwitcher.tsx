@@ -1,7 +1,6 @@
 "use client"
 
-import { Building2, Check, ChevronsUpDown, Plus } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { Building2, Check, ChevronsUpDown } from "lucide-react"
 import { useAuthStore } from "@/stores/auth"
 import { useOrgs } from "@/lib/api/orgs"
 import { cn } from "@/lib/utils"
@@ -9,7 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
@@ -18,7 +16,6 @@ interface OrgSwitcherProps {
 }
 
 export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
-  const router = useRouter()
   const { currentOrg, setCurrentOrg } = useAuthStore()
   const { data: orgs = [] } = useOrgs()
 
@@ -60,15 +57,6 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
           </DropdownMenuItem>
         ))}
 
-        <DropdownMenuSeparator />
-
-        <DropdownMenuItem
-          onSelect={() => router.push("/app/settings/org?create=1")}
-          className="flex items-center gap-2 text-fg-2"
-        >
-          <Plus size={14} />
-          <span>New organisation</span>
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

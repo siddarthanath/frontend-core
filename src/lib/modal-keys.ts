@@ -4,4 +4,7 @@ export const MODAL_KEYS = {
   UPGRADE_PLAN:   "upgrade-plan",
   CREATE_ORG:     "create-org",
   CHANGE_ROLE:    "change-role",
+  SETTINGS:       "settings",
 } as const
+
+export type SettingsSection = "general" | "billing" | "security" | "account"

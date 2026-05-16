@@ -8,7 +8,7 @@ export default function SignupPage() {
   return (
     <>
       <h1 className="text-xl font-bold mb-6 text-fg">Create your account</h1>
-      <SignupForm redirectTo="/onboarding/create-org" />
+      <SignupForm redirectTo="/onboarding" />
       <p className="text-sm mt-4 text-center text-fg-3">
         Already have an account?{" "}
         <Link href="/login" className="underline text-brand">

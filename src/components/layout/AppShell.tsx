@@ -3,6 +3,7 @@
 import type { ReactNode } from "react"
 import { Sidebar } from "@/components/layout/Sidebar"
 import { MobileHeader } from "@/components/layout/MobileHeader"
+import { SettingsModal } from "@/components/shared/SettingsModal"
 
 interface AppShellProps {
   children: ReactNode
@@ -13,6 +14,8 @@ interface AppShellProps {
 
 export function AppShell({ children, defaultCollapsed = false, rightPanel }: AppShellProps) {
   return (
+    <>
+    <SettingsModal />
     <div className="flex h-screen overflow-hidden bg-bg">
       {/* Desktop sidebar — hidden on < lg */}
       <Sidebar defaultCollapsed={defaultCollapsed} />
@@ -38,5 +41,6 @@ export function AppShell({ children, defaultCollapsed = false, rightPanel }: App
         </div>
       </div>
     </div>
+    </>
   )
 }

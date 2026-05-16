@@ -1,10 +1,11 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { Users, Settings, CreditCard, LogOut } from "lucide-react"
+import { Settings, LogOut } from "lucide-react"
 import { signOut } from "@/lib/auth/client"
-import { useAuthStore } from "@/stores/auth"
+import { useUiStore } from "@/stores/ui"
 import { useSubscription } from "@/lib/api/billing"
+import { useCurrentUser } from "@/lib/api/user"
 import { PLAN_LABELS_LONG } from "@/types/billing"
 import {
   DropdownMenu,
@@ -15,13 +16,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const MENU_ITEMS = [
-  { href: "/app/settings/members", label: "Members", icon: Users },
-  { href: "/app/settings/org", label: "Organisation", icon: Settings },
-  { href: "/app/settings/billing", label: "Billing", icon: CreditCard },
-]
-
-
 interface UserMenuProps {
   email: string
   displayName: string | null
@@ -30,8 +24,10 @@ interface UserMenuProps {
 
 export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
   const router = useRouter()
-  const currentOrg = useAuthStore((s) => s.currentOrg)
-  const { data: subscription } = useSubscription(currentOrg?.id ?? "")
+  const { openSettings } = useUiStore()
+  const { data: me } = useCurrentUser()
+  const orgId = me?.org_id ?? ""
+  const { data: subscription } = useSubscription(orgId)
   const planLabel = PLAN_LABELS_LONG[subscription?.plan ?? "free"]
   const initial = (displayName ?? email).charAt(0).toUpperCase()
 
@@ -77,19 +73,14 @@ export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
 
         <DropdownMenuSeparator />
 
-        {MENU_ITEMS.map(({ href, label, icon: Icon }) => (
-          <DropdownMenuItem key={href} onSelect={() => router.push(href)} className="flex items-center gap-2 text-fg-2">
-            <Icon size={14} className="shrink-0" />
-            {label}
-          </DropdownMenuItem>
-        ))}
+        <DropdownMenuItem onSelect={() => openSettings("general")} className="flex items-center gap-2 text-fg-2">
+          <Settings size={14} className="shrink-0" />
+          Settings
+        </DropdownMenuItem>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          onSelect={handleSignOut}
-          className="flex items-center gap-2 text-fg-2"
-        >
+        <DropdownMenuItem onSelect={handleSignOut} className="flex items-center gap-2 text-fg-2">
           <LogOut size={14} className="shrink-0" />
           Sign out
         </DropdownMenuItem>
