@@ -9,9 +9,7 @@ import { cn } from "@/lib/utils"
 import { NAV_ITEMS } from "@/types/nav"
 import { useUiStore } from "@/stores/ui"
 import { useAuthStore } from "@/stores/auth"
-import { ThemeToggle } from "@/components/shared/ThemeToggle"
 import { UserMenu } from "@/components/shared/UserMenu"
-import { OrgSwitcher } from "@/components/org/OrgSwitcher"
 
 
 interface SidebarProps {
@@ -61,7 +59,6 @@ export function Sidebar({ defaultCollapsed = false }: SidebarProps) {
               <span className="text-sm font-semibold text-fg truncate">Template</span>
             </Link>
             <div className="flex items-center gap-0.5 shrink-0">
-              <ThemeToggle />
               <button
                 onClick={toggleSidebar}
                 className="flex h-7 w-7 items-center justify-center rounded-md text-fg-2 hover:bg-bg-2 transition-colors"
@@ -108,15 +105,9 @@ export function Sidebar({ defaultCollapsed = false }: SidebarProps) {
         })}
       </nav>
 
-      {/* Org switcher — above the border */}
-      <div className={cn("px-2 py-1", collapsed && "flex justify-center")}>
-        <OrgSwitcher collapsed={collapsed} />
-      </div>
-
       {/* Footer */}
       {collapsed ? (
         <div className="border-t border-border shrink-0 flex flex-col items-center py-2 gap-1">
-          <ThemeToggle />
           <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed />
         </div>
       ) : (

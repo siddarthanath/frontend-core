@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/auth/client"
 import { GoogleButton, MicrosoftButton } from "@/components/auth/OAuthButton"
 
@@ -23,6 +24,7 @@ interface SignupFormProps {
 }
 
 export function SignupForm({ redirectTo }: SignupFormProps) {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -34,7 +36,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
     // create a duplicate account unless "Allow users to link multiple OAuth accounts" is enabled
     // in Supabase dashboard → Authentication → Settings. Enable it — users forget how they signed up.
     const supabase = createClient()
-    const { error } = await supabase.auth.signUp({
+    const { data: authData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
@@ -46,7 +48,13 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
       toast.error(error.message)
       return
     }
-    toast.success("Check your email to confirm your account.")
+    // Session present = email confirmation is disabled; redirect immediately.
+    // No session = confirmation email sent; prompt user to check inbox.
+    if (authData.session) {
+      router.push(redirectTo)
+    } else {
+      toast.success("Check your email to confirm your account.")
+    }
   }
 
   return (

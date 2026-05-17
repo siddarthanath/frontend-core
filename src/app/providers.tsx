@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider } from "next-themes"
 import { Toaster } from "sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { type ReactNode, useState, useEffect } from "react"
 
 interface ProvidersProps {
@@ -31,8 +32,10 @@ export function Providers({ children }: ProvidersProps) {
         namespace convention. enableSystem allows the "system" option in ThemeToggle.
       */}
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme">
-        {children}
-        <Toaster position="bottom-right" richColors />
+        <TooltipProvider delayDuration={300}>
+          {children}
+          <Toaster position="bottom-right" richColors />
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

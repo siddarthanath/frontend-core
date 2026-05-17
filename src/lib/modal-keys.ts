@@ -7,4 +7,4 @@ export const MODAL_KEYS = {
   SETTINGS:       "settings",
 } as const
 
-export type SettingsSection = "general" | "billing" | "security" | "account"
+export type SettingsSection = "general" | "personalisation" | "billing" | "security" | "account"

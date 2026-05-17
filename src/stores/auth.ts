@@ -26,6 +26,7 @@ export const useAuthStore = create<AuthState>()((set) => ({
     user,
     isAuthenticated: !!user,
     displayName: (user?.user_metadata?.full_name as string | undefined)?.split(" ")[0] ?? null,
+    ...(user === null ? { currentOrg: null } : {}),
   }),
 
   currentOrg: null,

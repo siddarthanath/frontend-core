@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { Settings, LogOut } from "lucide-react"
 import { signOut } from "@/lib/auth/client"
+import { useAuthStore } from "@/stores/auth"
 import { useUiStore } from "@/stores/ui"
 import { useSubscription } from "@/lib/api/billing"
 import { useCurrentUser } from "@/lib/api/user"
@@ -31,8 +32,11 @@ export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
   const planLabel = PLAN_LABELS_LONG[subscription?.plan ?? "free"]
   const initial = (displayName ?? email).charAt(0).toUpperCase()
 
+  const { setUser } = useAuthStore()
+
   async function handleSignOut() {
     await signOut()
+    setUser(null)
     router.push("/login")
     router.refresh()
   }
