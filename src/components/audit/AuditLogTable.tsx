@@ -16,7 +16,7 @@ function formatAction(action: string): string {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleString("en-GB", { dateStyle: "short", timeStyle: "short" })
+  return new Date(iso).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" })
 }
 
 function truncateId(id: string): string {

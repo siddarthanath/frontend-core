@@ -11,7 +11,7 @@ export function ApiKeysSection() {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="text-base font-semibold text-fg">API Keys</h2>
-        <p className="text-sm text-fg-3 mt-0.5">Generate keys for programmatic access to this org's resources.</p>
+        <p className="text-sm text-fg-3 mt-0.5">Generate keys for programmatic access to this org&apos;s resources.</p>
       </div>
 
       <ApiKeyList orgId={orgId} />

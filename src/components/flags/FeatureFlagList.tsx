@@ -30,6 +30,9 @@ export function FeatureFlagList({ orgId }: FeatureFlagListProps) {
   }
 
   async function handleDelete(flagId: string, key: string) {
+    // window.confirm is intentional — this is an internal admin action; replace with
+    // shadcn AlertDialog if a polished confirmation UI is needed in the product layer.
+    if (!window.confirm(`Delete flag "${key}"? This will immediately affect all flag checks.`)) return
     try {
       await deleteFlag.mutateAsync(flagId)
       toast.success(`"${key}" deleted`)

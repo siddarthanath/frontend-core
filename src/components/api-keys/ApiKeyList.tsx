@@ -12,7 +12,7 @@ interface ApiKeyListProps {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB")
+  return new Date(iso).toLocaleDateString(undefined, { day: "2-digit", month: "2-digit", year: "numeric" })
 }
 
 export function ApiKeyList({ orgId }: ApiKeyListProps) {
@@ -20,6 +20,9 @@ export function ApiKeyList({ orgId }: ApiKeyListProps) {
   const revoke = useRevokeApiKey(orgId)
 
   async function handleRevoke(keyId: string, name: string) {
+    // window.confirm is intentional — this is an internal admin action; replace with
+    // shadcn AlertDialog if a polished confirmation UI is needed in the product layer.
+    if (!window.confirm(`Revoke "${name}"? Any systems using this key will lose access immediately.`)) return
     try {
       await revoke.mutateAsync(keyId)
       toast.success(`"${name}" revoked`)

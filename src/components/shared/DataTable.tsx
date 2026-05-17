@@ -1,4 +1,5 @@
 "use client"
+"use no memo"
 
 /**
  * WHY TANSTACK TABLE + SHADCN, NOT AG GRID
@@ -86,8 +87,8 @@ export function DataTable<TData>({
     )
   }
 
-  const page = pagination ? Math.floor(pagination.offset / pagination.limit) + 1 : null
-  const totalPages = pagination ? Math.ceil(pagination.total / pagination.limit) : null
+  const page = pagination && pagination.limit > 0 ? Math.floor(pagination.offset / pagination.limit) + 1 : null
+  const totalPages = pagination && pagination.limit > 0 ? Math.ceil(pagination.total / pagination.limit) : null
 
   return (
     <div className="flex flex-col">
