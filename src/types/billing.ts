@@ -1,4 +1,11 @@
 export type Plan = "free" | "pro" | "max" | "enterprise"
+
+export const PLAN_ORDER: Record<Plan, number> = {
+  free: 0,
+  pro: 1,
+  max: 2,
+  enterprise: 3,
+}
 export type BillingPeriod = "monthly" | "yearly"
 
 export const PLAN_LABELS: Record<Plan, string> = {
@@ -69,6 +76,7 @@ export interface SubscriptionResponse {
   stripe_subscription_id: string | null
   current_period_end: string | null
   cancel_at_period_end: boolean
+  cancellation_reason: string | null
   created_at: string
 }
 

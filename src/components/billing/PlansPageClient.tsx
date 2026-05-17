@@ -6,9 +6,9 @@ import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { useUiStore } from "@/stores/ui"
 import { useCurrentUser } from "@/lib/api/user"
-import { useSubscription, useCreateCheckout, useCreatePortal } from "@/lib/api/billing"
+import { useSubscription, useCreateCheckout, useCreatePortal, useUpgradeSubscription } from "@/lib/api/billing"
 import { PricingCard } from "@/components/billing/PricingCard"
-import { PLAN_CONFIGS } from "@/types/billing"
+import { PLAN_CONFIGS, PLAN_ORDER } from "@/types/billing"
 import type { BillingPeriod, Plan } from "@/types/billing"
 
 interface PlansPageClientProps {
@@ -29,6 +29,7 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
   const { data: subscription } = useSubscription(orgId)
   const createCheckout = useCreateCheckout(orgId)
   const createPortal = useCreatePortal(orgId)
+  const upgradeSubscription = useUpgradeSubscription(orgId)
 
   async function handleUpgrade(plan: Plan) {
     if (plan === "enterprise") {
@@ -37,21 +38,34 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
     }
 
     if (subscription?.stripe_subscription_id) {
-      // Existing subscriber — all plan changes go via portal for now.
-      // TODO: split upgrade (targetPlan > currentPlan) to POST /billing/upgrade (stripe.Subscription.modify)
-      // so upgrades stay in-app. Portal is correct for downgrade/cancel only. See TODO.md.
-      try {
-        const { portal_url } = await createPortal.mutateAsync({
-          return_url: `${window.location.origin}${returnTo}`,
-        })
-        window.location.assign(portal_url)
-      } catch {
-        toast.error("Failed to open billing portal")
+      const currentOrder = PLAN_ORDER[subscription.plan]
+      const targetOrder = PLAN_ORDER[plan]
+
+      if (targetOrder > currentOrder) {
+        // Upgrade — swap price in-place, no redirect needed
+        try {
+          await upgradeSubscription.mutateAsync({ plan, period })
+          toast.success("Plan upgraded successfully")
+          closeSettings()
+          router.push(returnTo)
+        } catch {
+          toast.error("Failed to upgrade plan")
+        }
+      } else {
+        // Downgrade or same plan — send to Stripe portal
+        try {
+          const { portal_url } = await createPortal.mutateAsync({
+            return_url: `${window.location.origin}${returnTo}`,
+          })
+          window.location.assign(portal_url)
+        } catch {
+          toast.error("Failed to open billing portal")
+        }
       }
       return
     }
 
-    // No subscription yet — free means just go back (soft nav, so close modal first)
+    // No subscription yet — free means just go back
     if (plan === "free") {
       closeSettings()
       router.push(returnTo)
@@ -120,7 +134,7 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
             isCurrentPlan={subscription?.plan === plan}
             showYearlyBanner={period === "yearly"}
             onUpgrade={contactUs ? () => handleUpgrade("enterprise") : () => handleUpgrade(plan)}
-            loading={meLoading || createCheckout.isPending || createPortal.isPending}
+            loading={meLoading || createCheckout.isPending || createPortal.isPending || upgradeSubscription.isPending}
           />
         ))}
       </div>

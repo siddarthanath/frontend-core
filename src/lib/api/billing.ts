@@ -35,3 +35,21 @@ export function useCreatePortal(orgId: string) {
       api.post(`api/v1/orgs/${orgId}/billing/portal`, { json: body }).json<PortalResponse>(),
   })
 }
+
+export function useUpgradeSubscription(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: { plan: Plan; period: BillingPeriod }) =>
+      api.post(`api/v1/orgs/${orgId}/billing/upgrade`, { json: body }).json<{ message: string }>(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: billingKeys.subscription(orgId) }),
+  })
+}
+
+export function useCancelSubscription(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: { reason?: string }) =>
+      api.post(`api/v1/orgs/${orgId}/billing/cancel`, { json: body }).json<{ message: string }>(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: billingKeys.subscription(orgId) }),
+  })
+}

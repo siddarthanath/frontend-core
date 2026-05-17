@@ -9,6 +9,7 @@ import { useAutoSelectOrg } from "@/hooks/useAutoSelectOrg"
 import { useSubscription, useCreateCheckout, useCreatePortal } from "@/lib/api/billing"
 import { PlanBadge } from "@/components/billing/PlanBadge"
 import { PricingCard } from "@/components/billing/PricingCard"
+import { CancelSubscriptionModal } from "@/components/billing/CancelSubscriptionModal"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RequireOrg } from "@/components/shared/RequireOrg"
@@ -18,6 +19,7 @@ import type { BillingPeriod, Plan } from "@/types/billing"
 export function BillingPageClient() {
   const { currentOrg } = useAuthStore()
   const [period, setPeriod] = useState<BillingPeriod>("monthly")
+  const [cancelOpen, setCancelOpen] = useState(false)
 
   useAutoSelectOrg()
 
@@ -56,6 +58,12 @@ export function BillingPageClient() {
 
   return (
     <RequireOrg>
+      <CancelSubscriptionModal
+        orgId={currentOrg?.id ?? ""}
+        periodEnd={subscription?.current_period_end ?? null}
+        open={cancelOpen}
+        onOpenChange={setCancelOpen}
+      />
       <div className="p-6 flex flex-col gap-8">
         {/* Header */}
         <div className="flex items-start justify-between">
@@ -64,17 +72,29 @@ export function BillingPageClient() {
             <p className="text-sm text-fg-2 mt-1">{currentOrg!.name}</p>
           </div>
           {subscription?.stripe_subscription_id && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handlePortal}
-              disabled={createPortal.isPending}
-              className="flex items-center gap-2"
-            >
-              <CreditCard size={14} />
-              Manage billing
-              <ExternalLink size={12} className="text-fg-3" />
-            </Button>
+            <div className="flex items-center gap-2">
+              {!subscription.cancel_at_period_end && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setCancelOpen(true)}
+                  className="text-fg-3 hover:text-destructive"
+                >
+                  Cancel plan
+                </Button>
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePortal}
+                disabled={createPortal.isPending}
+                className="flex items-center gap-2"
+              >
+                <CreditCard size={14} />
+                Manage billing
+                <ExternalLink size={12} className="text-fg-3" />
+              </Button>
+            </div>
           )}
         </div>
 
