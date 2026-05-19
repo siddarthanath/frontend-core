@@ -25,15 +25,15 @@ test.describe("Authenticated flows", () => {
     await expect(page.getByRole("navigation")).toBeVisible()
   })
 
-  test("settings modal opens and shows tabs", async ({ page }) => {
+  test("settings modal opens and shows nav", async ({ page }) => {
     await page.getByRole("button", { name: /settings/i }).click()
     await expect(page.getByRole("dialog")).toBeVisible()
-    await expect(page.getByRole("tab", { name: /billing/i })).toBeVisible()
+    await expect(page.getByRole("button", { name: /billing/i })).toBeVisible()
   })
 
-  test("billing tab shows current plan", async ({ page }) => {
+  test("billing nav item shows current plan", async ({ page }) => {
     await page.getByRole("button", { name: /settings/i }).click()
-    await page.getByRole("tab", { name: /billing/i }).click()
+    await page.getByRole("button", { name: /billing/i }).click()
     // Plan badge should be visible — at minimum the Free plan
     await expect(page.getByText(/free|pro|max/i).first()).toBeVisible()
   })
