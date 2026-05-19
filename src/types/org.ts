@@ -1,5 +1,5 @@
 export type OrgRole = "owner" | "admin" | "member"
-export type MembershipStatus = "invited" | "active"
+export type MembershipStatus = "invited" | "active" | "suspended"
 
 export interface OrgResponse {
   id: string

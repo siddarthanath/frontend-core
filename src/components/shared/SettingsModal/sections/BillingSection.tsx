@@ -3,15 +3,16 @@
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { ExternalLink, CreditCard, ArrowRight } from "lucide-react"
-import { useCurrentUser } from "@/lib/api/user"
 import { useSubscription, useCreatePortal } from "@/lib/api/billing"
 import { PlanBadge } from "@/components/billing/PlanBadge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useAuthStore } from "@/stores/auth"
+
 export function BillingSection() {
   const router = useRouter()
-  const { data: me } = useCurrentUser()
-  const orgId = me?.org_id ?? ""
+  const { currentOrg } = useAuthStore()
+  const orgId = currentOrg?.id ?? ""
 
   const { data: subscription, isLoading } = useSubscription(orgId)
   const createPortal = useCreatePortal(orgId)
@@ -66,7 +67,7 @@ export function BillingSection() {
             <div className="text-right">
               <span className="text-xs text-fg-3">Renews </span>
               <span className="text-xs text-fg">
-                {new Date(subscription.current_period_end).toLocaleDateString("en-GB")}
+                {new Date(subscription.current_period_end).toLocaleDateString(undefined)}
               </span>
             </div>
           )}
