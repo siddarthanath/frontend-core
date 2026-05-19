@@ -53,3 +53,19 @@ export function useDeleteAccount() {
       api.delete("api/v1/user/account", { json: { confirmation: "DELETE MY ACCOUNT" } }).json<{ message: string }>(),
   })
 }
+
+export function useUpdatePassword() {
+  return useMutation({
+    mutationFn: (body: { new_password: string }) =>
+      api.put("api/v1/user/password", { json: body }).json<{ message: string }>(),
+  })
+}
+
+export function useUpdateEmail() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: { new_email: string }) =>
+      api.put("api/v1/user/email", { json: body }).json<{ message: string }>(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: userKeys.me }),
+  })
+}
