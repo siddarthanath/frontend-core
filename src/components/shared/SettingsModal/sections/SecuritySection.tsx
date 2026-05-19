@@ -41,7 +41,10 @@ export function SecuritySection() {
         <p className="text-sm text-fg-3 mt-0.5">Manage your password, email, and two-factor authentication.</p>
       </div>
 
-      <div className="rounded-lg border border-border bg-surface p-4 flex flex-col gap-4">
+      <form
+        onSubmit={(e) => { e.preventDefault(); handlePasswordUpdate() }}
+        className="rounded-lg border border-border bg-surface p-4 flex flex-col gap-4"
+      >
         <div>
           <p className="text-sm font-medium text-fg">Change password</p>
           <p className="text-xs text-fg-3 mt-0.5">Set a new password for your account.</p>
@@ -54,19 +57,23 @@ export function SecuritySection() {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="••••••••"
+            required
           />
         </div>
         <Button
+          type="submit"
           size="sm"
           className="self-start"
           disabled={!newPassword || updatePassword.isPending}
-          onClick={handlePasswordUpdate}
         >
           {updatePassword.isPending ? "Updating…" : "Update password"}
         </Button>
-      </div>
+      </form>
 
-      <div className="rounded-lg border border-border bg-surface p-4 flex flex-col gap-4">
+      <form
+        onSubmit={(e) => { e.preventDefault(); handleEmailUpdate() }}
+        className="rounded-lg border border-border bg-surface p-4 flex flex-col gap-4"
+      >
         <div>
           <p className="text-sm font-medium text-fg">Change email</p>
           <p className="text-xs text-fg-3 mt-0.5">A confirmation link will be sent to your new address.</p>
@@ -79,17 +86,18 @@ export function SecuritySection() {
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             placeholder="you@example.com"
+            required
           />
         </div>
         <Button
+          type="submit"
           size="sm"
           className="self-start"
           disabled={!newEmail || updateEmail.isPending}
-          onClick={handleEmailUpdate}
         >
           {updateEmail.isPending ? "Sending…" : "Update email"}
         </Button>
-      </div>
+      </form>
 
       <div className="rounded-lg border border-border bg-surface p-4 flex items-start justify-between gap-4">
         <div className="flex items-start gap-3">
