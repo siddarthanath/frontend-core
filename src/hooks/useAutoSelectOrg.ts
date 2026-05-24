@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/stores/auth"
 import { useOrgs } from "@/lib/api/orgs"
 
+// NOTE: Brief empty-state flash on hard refresh is expected while useOrgs loads.
 // Called in every (app) page that needs an active org.
 // Two behaviours:
 //   1. No orgs → redirect to /onboarding/pick-plan (B2C fallback — shouldn't happen

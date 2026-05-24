@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
-import { useCurrentUser, useUpdateProfile } from "@/lib/api/user"
+import { useCurrentUser, useUpdateProfile, useUpdatePassword } from "@/lib/api/user"
 import type { UserMeResponse } from "@/lib/api/user"
 import { ErrorState } from "@/components/shared/ErrorState"
 import { Button } from "@/components/ui/button"
@@ -22,9 +22,11 @@ export function GeneralSection() {
 function GeneralForm({ me }: { me: UserMeResponse }) {
   const { user } = useAuthStore()
   const updateProfile = useUpdateProfile()
+  const updatePassword = useUpdatePassword()
 
   const [firstName, setFirstName] = useState(me.first_name ?? "")
   const [lastName, setLastName] = useState(me.last_name ?? "")
+  const [newPassword, setNewPassword] = useState("")
 
   async function handleSave() {
     try {
@@ -35,8 +37,22 @@ function GeneralForm({ me }: { me: UserMeResponse }) {
     }
   }
 
+  async function handleChangePassword() {
+    if (newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters")
+      return
+    }
+    try {
+      await updatePassword.mutateAsync({ new_password: newPassword })
+      setNewPassword("")
+      toast.success("Password updated")
+    } catch {
+      toast.error("Failed to update password")
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
         <h2 className="text-base font-semibold text-fg">General</h2>
         <p className="text-sm text-fg-3 mt-0.5">Manage your name and account details.</p>
@@ -76,6 +92,33 @@ function GeneralForm({ me }: { me: UserMeResponse }) {
           className="self-start"
         >
           {updateProfile.isPending ? "Saving…" : "Save changes"}
+        </Button>
+      </div>
+
+      <div className="flex flex-col gap-4 max-w-sm">
+        <div>
+          <h3 className="text-sm font-semibold text-fg">Change password</h3>
+          <p className="text-xs text-fg-3 mt-0.5">Must be at least 8 characters.</p>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="new-password">New password</Label>
+          <Input
+            id="new-password"
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            placeholder="••••••••"
+          />
+        </div>
+
+        <Button
+          onClick={handleChangePassword}
+          disabled={updatePassword.isPending || !newPassword}
+          variant="outline"
+          className="self-start"
+        >
+          {updatePassword.isPending ? "Updating…" : "Update password"}
         </Button>
       </div>
     </div>
