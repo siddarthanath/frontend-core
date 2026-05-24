@@ -62,6 +62,7 @@ export function CancelSubscriptionModal({
             placeholder="Tell us why you're leaving — this helps us improve."
             value={reason}
             onChange={(e) => setReason(e.target.value)}
+            maxLength={500}
             rows={3}
           />
         </div>
