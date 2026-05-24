@@ -12,9 +12,26 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: [
+    // Runs once — logs in and saves browser session to disk.
     {
-      name: "chromium",
+      name: "setup",
+      testMatch: /auth\.setup\.ts/,
+    },
+    // Authenticated tests — start with the saved session, no login overhead per test.
+    {
+      name: "authenticated",
+      dependencies: ["setup"],
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "playwright/.auth/user.json",
+      },
+      testMatch: "**/authenticated/**/*.spec.ts",
+    },
+    // Public tests — marketing pages, auth forms, theme toggle. No session needed.
+    {
+      name: "public",
       use: { ...devices["Desktop Chrome"] },
+      testMatch: "**/public/**/*.spec.ts",
     },
   ],
   webServer: {
