@@ -10,12 +10,14 @@ test.describe("Theme toggle", () => {
   test("toggle switches to dark mode", async ({ page }) => {
     await page.goto("/")
     await page.getByRole("button", { name: /toggle theme/i }).click()
+    await page.getByRole("menuitem", { name: /dark/i }).click()
     await expect(page.locator("html")).toHaveClass(/dark/)
   })
 
   test("theme persists after navigation", async ({ page }) => {
     await page.goto("/")
     await page.getByRole("button", { name: /toggle theme/i }).click()
+    await page.getByRole("menuitem", { name: /dark/i }).click()
     await expect(page.locator("html")).toHaveClass(/dark/)
 
     await page.getByRole("link", { name: /sign in/i }).click()
@@ -25,7 +27,10 @@ test.describe("Theme toggle", () => {
   test("toggle switches back to light mode", async ({ page }) => {
     await page.goto("/")
     await page.getByRole("button", { name: /toggle theme/i }).click()
+    await page.getByRole("menuitem", { name: /dark/i }).click()
+    await expect(page.locator("html")).toHaveClass(/dark/)
     await page.getByRole("button", { name: /toggle theme/i }).click()
+    await page.getByRole("menuitem", { name: /light/i }).click()
     await expect(page.locator("html")).not.toHaveClass(/dark/)
   })
 })
