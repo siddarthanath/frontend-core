@@ -12,6 +12,8 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
+    // One-off window augmentation — inline cast is idiomatic for a single property.
+    // Move to global.d.ts only if __reactReady is accessed in multiple files.
     ;(window as Window & { __reactReady?: boolean }).__reactReady = true
   }, [])
 

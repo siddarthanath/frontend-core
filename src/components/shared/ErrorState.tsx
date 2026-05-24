@@ -10,7 +10,7 @@ export function ErrorState({ code, message, onRetry }: ErrorStateProps) {
       <p className="font-semibold text-error">{code ?? "Error"}</p>
       <p className="text-sm text-fg-2">{message ?? "Something went wrong."}</p>
       {onRetry && (
-        <button onClick={onRetry} className="text-sm underline text-brand">
+        <button type="button" onClick={onRetry} className="text-sm underline text-brand">
           Try again
         </button>
       )}

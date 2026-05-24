@@ -5,13 +5,15 @@ import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
 import { useCurrentUser, useUpdateProfile } from "@/lib/api/user"
 import type { UserMeResponse } from "@/lib/api/user"
+import { ErrorState } from "@/components/shared/ErrorState"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 export function GeneralSection() {
-  const { data: me } = useCurrentUser()
+  const { data: me, isError, refetch } = useCurrentUser()
 
+  if (isError) return <ErrorState message="Failed to load profile." onRetry={() => refetch()} />
   if (!me) return null
 
   return <GeneralForm me={me} />

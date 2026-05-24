@@ -56,8 +56,9 @@ export function CancelSubscriptionModal({
         </DialogHeader>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm text-fg-2">Reason (optional)</label>
+          <label htmlFor="cancel-reason" className="text-sm text-fg-2">Reason (optional)</label>
           <Textarea
+            id="cancel-reason"
             placeholder="Tell us why you're leaving — this helps us improve."
             value={reason}
             onChange={(e) => setReason(e.target.value)}
