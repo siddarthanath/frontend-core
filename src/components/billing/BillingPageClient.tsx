@@ -6,14 +6,14 @@ import { ExternalLink, CreditCard } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuthStore } from "@/stores/auth"
 import { useAutoSelectOrg } from "@/hooks/useAutoSelectOrg"
-import { useSubscription, useCreateCheckout, useCreatePortal } from "@/lib/api/billing"
+import { useSubscription, useCreateCheckout, useCreatePortal, useUpgradeSubscription } from "@/lib/api/billing"
 import { PlanBadge } from "@/components/billing/PlanBadge"
 import { PricingCard } from "@/components/billing/PricingCard"
 import { CancelSubscriptionModal } from "@/components/billing/CancelSubscriptionModal"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { RequireOrg } from "@/components/shared/RequireOrg"
-import { PLAN_CONFIGS } from "@/types/billing"
+import { PLAN_CONFIGS, PLAN_ORDER } from "@/types/billing"
 import type { BillingPeriod, Plan } from "@/types/billing"
 
 export function BillingPageClient() {
@@ -26,12 +26,41 @@ export function BillingPageClient() {
   const { data: subscription, isLoading } = useSubscription(currentOrg?.id ?? "")
   const createCheckout = useCreateCheckout(currentOrg?.id ?? "")
   const createPortal = useCreatePortal(currentOrg?.id ?? "")
+  const upgradeSubscription = useUpgradeSubscription(currentOrg?.id ?? "")
 
   async function handleUpgrade(plan: Plan) {
     if (plan === "enterprise") {
       window.location.assign("mailto:hello@example.com?subject=Enterprise enquiry")
       return
     }
+
+    if (subscription?.stripe_subscription_id) {
+      const currentOrder = PLAN_ORDER[subscription.plan]
+      const targetOrder = PLAN_ORDER[plan]
+
+      if (targetOrder > currentOrder) {
+        // Upgrade — swap price in-place via Stripe, no checkout redirect needed
+        try {
+          await upgradeSubscription.mutateAsync({ plan, period })
+          toast.success("Plan upgraded successfully")
+        } catch {
+          toast.error("Failed to upgrade plan")
+        }
+      } else {
+        // Downgrade or same plan — send to Stripe portal
+        try {
+          const { portal_url } = await createPortal.mutateAsync({
+            return_url: window.location.href,
+          })
+          window.location.assign(portal_url)
+        } catch {
+          toast.error("Failed to open billing portal")
+        }
+      }
+      return
+    }
+
+    // No subscription yet — start Stripe checkout
     try {
       const { checkout_url } = await createCheckout.mutateAsync({
         plan,
@@ -50,7 +79,7 @@ export function BillingPageClient() {
       const { portal_url } = await createPortal.mutateAsync({
         return_url: window.location.href,
       })
-      window.open(portal_url, "_blank")
+      window.location.assign(portal_url)
     } catch {
       toast.error("Failed to open billing portal")
     }

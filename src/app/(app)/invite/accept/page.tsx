@@ -4,12 +4,10 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import { useAcceptInvite } from "@/lib/api/orgs"
-import { useAuthStore } from "@/stores/auth"
 
 export default function AcceptInvitePage() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const { setCurrentOrg } = useAuthStore()
   const orgId = searchParams.get("org_id") ?? ""
   const acceptInvite = useAcceptInvite(orgId)
 
@@ -21,8 +19,9 @@ export default function AcceptInvitePage() {
     }
 
     acceptInvite.mutate(undefined, {
-      onSuccess: (membership) => {
-        setCurrentOrg({ id: membership.org_id, name: "" })
+      onSuccess: () => {
+        // useAcceptInvite already invalidates orgKeys.all; useAutoSelectOrg picks up the
+        // correct org name from the refetched list — no need to write a blank name here.
         toast.success("Invite accepted — welcome to the org")
         router.replace("/app/dashboard")
       },

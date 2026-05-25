@@ -9,9 +9,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/auth/client"
+import { validatePassword } from "@/lib/auth/password"
 
 const schema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().superRefine((v, ctx) => {
+    const err = validatePassword(v)
+    if (err) ctx.addIssue({ code: z.ZodIssueCode.custom, message: err })
+  }),
   confirm: z.string(),
 }).refine((d) => d.password === d.confirm, {
   message: "Passwords do not match",
