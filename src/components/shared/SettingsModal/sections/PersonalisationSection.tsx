@@ -3,9 +3,9 @@
 import { useTheme } from "next-themes"
 import { Monitor, Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { OrgSwitcher } from "@/components/org/OrgSwitcher"
+import { SettingsCard } from "@/components/shared/SettingsModal/SettingsCard"
 
 const APPEARANCE_OPTIONS = [
   { value: "system", icon: Monitor, label: "System" },
@@ -23,17 +23,13 @@ export function PersonalisationSection() {
         <p className="text-sm text-fg-3 mt-0.5">Customise your workspace and appearance.</p>
       </div>
 
-      <div className="flex flex-col gap-4 max-w-sm">
-        <div className="flex flex-col gap-1.5">
-          <Label>Workspace</Label>
-          <OrgSwitcher />
-        </div>
-      </div>
+      <SettingsCard title="Workspace" description="Switch between your workspaces.">
+        <OrgSwitcher />
+      </SettingsCard>
 
-      <div className="flex flex-col gap-3">
-        <p className="text-sm font-semibold text-fg">Preferences</p>
-        <div className="flex items-center justify-between max-w-sm">
-          <span className="text-sm text-fg-2">Appearance</span>
+      <SettingsCard title="Appearance" description="Choose your preferred theme.">
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-fg-2">Theme</span>
           <div className="flex items-center gap-1 rounded-lg border border-border p-1">
             {APPEARANCE_OPTIONS.map(({ value, icon: Icon, label }) => (
               <Tooltip key={value}>
@@ -54,7 +50,7 @@ export function PersonalisationSection() {
             ))}
           </div>
         </div>
-      </div>
+      </SettingsCard>
     </div>
   )
 }

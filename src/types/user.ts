@@ -7,6 +7,7 @@ export interface UserMeResponse {
   org_count: number
   /** B2C: personal org auto-created on first login. Use for checkout org_id. */
   org_id: string | null
+  org_name: string | null
 }
 
 export interface UpdateProfileBody {

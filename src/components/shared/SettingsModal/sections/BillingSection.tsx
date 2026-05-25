@@ -8,6 +8,7 @@ import { PlanBadge } from "@/components/billing/PlanBadge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ErrorState } from "@/components/shared/ErrorState"
+import { SettingsCard } from "@/components/shared/SettingsModal/SettingsCard"
 import { useAuthStore } from "@/stores/auth"
 
 export function BillingSection() {
@@ -31,60 +32,57 @@ export function BillingSection() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-start justify-between">
-        <div>
-          <h2 className="text-base font-semibold text-fg">Billing</h2>
-          <p className="text-sm text-fg-3 mt-0.5">Manage your plan and payment details.</p>
-        </div>
-        {subscription?.stripe_subscription_id && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handlePortal}
-            disabled={createPortal.isPending}
-            className="flex items-center gap-2"
-          >
-            <CreditCard size={13} />
-            Manage billing
-            <ExternalLink size={11} className="text-fg-3" />
-          </Button>
-        )}
+      <div>
+        <h2 className="text-base font-semibold text-fg">Billing</h2>
+        <p className="text-sm text-fg-3 mt-0.5">Manage your plan and payment details.</p>
       </div>
 
-      <div className="rounded-lg border border-border bg-surface p-4 flex items-center justify-between">
-        <div className="flex flex-col gap-1">
-          <span className="text-xs text-fg-3">Current plan</span>
+      <SettingsCard
+        title="Plan"
+        description="See your current plan and modify."
+        footer={
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => router.push("/checkout")}
+              className="flex items-center gap-1.5"
+            >
+              Adjust plan
+              <ArrowRight size={12} />
+            </Button>
+            {subscription?.stripe_subscription_id && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePortal}
+                disabled={createPortal.isPending}
+                className="flex items-center gap-2"
+              >
+                <CreditCard size={13} />
+                Manage billing
+                <ExternalLink size={11} className="text-fg-3" />
+              </Button>
+            )}
+          </>
+        }
+      >
+        <div className="flex flex-col gap-1 items-start">
           {isLoading ? (
             <Skeleton className="h-5 w-16" />
           ) : (
-            <div className="flex items-center gap-2">
-              <PlanBadge plan={subscription?.plan ?? "free"} />
-              {subscription?.cancel_at_period_end && (
-                <span className="text-xs text-fg-3">Cancels at period end</span>
-              )}
-            </div>
+            <PlanBadge plan={subscription?.plan ?? "free"} />
+          )}
+          {subscription?.cancel_at_period_end && (
+            <span className="text-xs text-fg-3">Cancels at period end</span>
+          )}
+          {subscription?.current_period_end && !subscription.cancel_at_period_end && (
+            <span className="text-xs text-fg-3">
+              Renews {new Date(subscription.current_period_end).toLocaleDateString(undefined)}
+            </span>
           )}
         </div>
-        <div className="flex flex-col items-end gap-2">
-          {subscription?.current_period_end && (
-            <div className="text-right">
-              <span className="text-xs text-fg-3">Renews </span>
-              <span className="text-xs text-fg">
-                {new Date(subscription.current_period_end).toLocaleDateString(undefined)}
-              </span>
-            </div>
-          )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => router.push(`/checkout?returnTo=${window.location.pathname}`)}
-            className="flex items-center gap-1.5"
-          >
-            Adjust plan
-            <ArrowRight size={12} />
-          </Button>
-        </div>
-      </div>
+      </SettingsCard>
     </div>
   )
 }

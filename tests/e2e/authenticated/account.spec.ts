@@ -1,6 +1,6 @@
 import { test, expect } from "../fixtures"
 
-test.describe("Account settings — delete account", () => {
+test.describe("Account settings", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/app/dashboard")
     await page.getByRole("button", { name: /settings/i }).click()
@@ -8,9 +8,13 @@ test.describe("Account settings — delete account", () => {
     await page.getByRole("button", { name: /account/i }).click()
   })
 
-  test("renders the delete account section", async ({ page }) => {
+  test("renders the account section heading", async ({ page }) => {
     await expect(page.getByRole("heading", { name: /account/i })).toBeVisible()
-    await expect(page.getByText(/permanently delete/i)).toBeVisible()
+  })
+
+  test("shows sign out of all devices button", async ({ page }) => {
+    await expect(page.getByRole("button", { name: /sign out everywhere/i })).toBeVisible()
+    await expect(page.getByRole("button", { name: /sign out everywhere/i })).toBeEnabled()
   })
 
   test("delete button is disabled before confirmation phrase is typed", async ({ page }) => {

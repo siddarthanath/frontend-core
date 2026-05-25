@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
-import { signOut } from "@/lib/auth/client"
+import { signOut, signOutAll } from "@/lib/auth/client"
 import { useDeleteAccount } from "@/lib/api/user"
 import { useAuthStore } from "@/stores/auth"
 import { Button } from "@/components/ui/button"
@@ -15,8 +15,21 @@ const CONFIRMATION_PHRASE = "DELETE MY ACCOUNT"
 export function AccountSection() {
   const router = useRouter()
   const [confirmation, setConfirmation] = useState("")
+  const [signingOut, setSigningOut] = useState(false)
   const deleteAccount = useDeleteAccount()
   const { setUser } = useAuthStore()
+
+  async function handleSignOutAll() {
+    setSigningOut(true)
+    try {
+      await signOutAll()
+      setUser(null)
+      router.push("/login")
+    } catch {
+      toast.error("Failed to sign out — try again")
+      setSigningOut(false)
+    }
+  }
 
   async function handleDelete() {
     if (confirmation !== CONFIRMATION_PHRASE) return
@@ -34,7 +47,22 @@ export function AccountSection() {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="text-base font-semibold text-fg">Account</h2>
-        <p className="text-sm text-fg-3 mt-0.5">Permanently delete your account and all associated data.</p>
+        <p className="text-sm text-fg-3 mt-0.5">Manage your session and account data.</p>
+      </div>
+
+      <div className="rounded-lg border border-border bg-surface p-4 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium text-fg">Sign out of all devices</p>
+          <p className="text-xs text-fg-3 mt-1">Revokes all active sessions including this one.</p>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={signingOut}
+          onClick={handleSignOutAll}
+        >
+          {signingOut ? "Signing out…" : "Sign out everywhere"}
+        </Button>
       </div>
 
       <div className="rounded-lg border border-error/40 bg-error/5 p-4 flex flex-col gap-4">

@@ -18,3 +18,7 @@ export function createClient() {
 export async function signOut(): Promise<void> {
   await createClient().auth.signOut()
 }
+
+export async function signOutAll(): Promise<void> {
+  await createClient().auth.signOut({ scope: "global" })
+}
