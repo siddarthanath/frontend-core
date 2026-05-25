@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+# Required GitHub Actions secrets (Settings → Secrets and variables → Actions):
+#   NEXT_PUBLIC_SUPABASE_URL   — your Supabase project URL
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY — your Supabase anon key (public, safe in CI)
+#   NEXT_PUBLIC_API_URL        — backend URL (e.g. http://localhost:8000 or your deployed API)
+# Forked repos start with no secrets — each user sets their own.
 env:
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
