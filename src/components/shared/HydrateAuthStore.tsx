@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect } from "react"
+import { useState } from "react"
 import type { User } from "@supabase/supabase-js"
 import { useAuthStore } from "@/stores/auth"
 
+// useState initializer runs synchronously before the first render, so children
+// read the hydrated store state immediately — no useEffect flash.
 export function HydrateAuthStore({ user }: { user: User }) {
-  const setUser = useAuthStore((s) => s.setUser)
-  useEffect(() => { setUser(user) }, [user, setUser])
+  useState(() => useAuthStore.getState().setUser(user))
   return null
 }

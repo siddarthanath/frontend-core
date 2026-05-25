@@ -16,10 +16,10 @@ import { useOrgs } from "@/lib/api/orgs"
 export function useAutoSelectOrg() {
   const router = useRouter()
   const { currentOrg, setCurrentOrg } = useAuthStore()
-  const { data: orgs = [], isLoading } = useOrgs()
+  const { data: orgs = [], isLoading, isFetching } = useOrgs()
 
   useEffect(() => {
-    if (isLoading) return
+    if (isLoading || isFetching) return
     if (orgs.length === 0) {
       router.push("/checkout")
       return
@@ -27,5 +27,5 @@ export function useAutoSelectOrg() {
     if (!currentOrg) {
       setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
     }
-  }, [orgs, currentOrg, isLoading, router, setCurrentOrg])
+  }, [orgs, currentOrg, isLoading, isFetching, router, setCurrentOrg])
 }

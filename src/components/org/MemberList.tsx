@@ -33,6 +33,7 @@ export function MemberList({ orgId, currentUserRole, currentUserId }: MemberList
   const { data: members = [], isLoading } = useOrgMembers(orgId)
   const remove = useRemoveMember(orgId)
   const [roleTarget, setRoleTarget] = useState<MemberResponse | null>(null)
+  const [removingId, setRemovingId] = useState<string | null>(null)
 
   const canManage = currentUserRole === "owner" || currentUserRole === "admin"
 
@@ -91,12 +92,16 @@ export function MemberList({ orgId, currentUserRole, currentUserId }: MemberList
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem
+                  disabled={remove.isPending && removingId === m.user_id}
                   onSelect={async () => {
+                    setRemovingId(m.user_id)
                     try {
                       await remove.mutateAsync(m.user_id)
                       toast.success("Member removed")
                     } catch {
                       toast.error("Failed to remove member")
+                    } finally {
+                      setRemovingId(null)
                     }
                   }}
                   className="flex items-center gap-2 text-destructive focus:text-destructive"
@@ -110,7 +115,7 @@ export function MemberList({ orgId, currentUserRole, currentUserId }: MemberList
         },
       },
     ]
-  }, [canManage, currentUserRole, currentUserId, remove])
+  }, [canManage, currentUserRole, currentUserId, remove, removingId])
 
   return (
     <>

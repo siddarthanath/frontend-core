@@ -27,8 +27,12 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
-  // Protect all /app/* routes — redirect unauthenticated users to login
-  if (pathname.startsWith("/app") && !user) {
+  // Protect all authenticated routes — redirect unauthenticated users to login
+  const isProtected =
+    pathname.startsWith("/app") ||
+    pathname.startsWith("/onboarding") ||
+    pathname.startsWith("/checkout")
+  if (isProtected && !user) {
     return NextResponse.redirect(new URL("/login", request.url))
   }
 

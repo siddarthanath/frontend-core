@@ -57,6 +57,7 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
           const { portal_url } = await createPortal.mutateAsync({
             return_url: `${window.location.origin}${returnTo}`,
           })
+          closeSettings()
           window.location.assign(portal_url)
         } catch {
           toast.error("Failed to open billing portal")

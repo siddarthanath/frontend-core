@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { toast } from "sonner"
 import { Trash2 } from "lucide-react"
 import { useApiKeys, useRevokeApiKey } from "@/lib/api/api-keys"
@@ -18,16 +19,20 @@ function formatDate(iso: string): string {
 export function ApiKeyList({ orgId }: ApiKeyListProps) {
   const { data: keys, isLoading } = useApiKeys(orgId)
   const revoke = useRevokeApiKey(orgId)
+  const [revokingId, setRevokingId] = useState<string | null>(null)
 
   async function handleRevoke(keyId: string, name: string) {
     // window.confirm is intentional — this is an internal admin action; replace with
     // shadcn AlertDialog if a polished confirmation UI is needed in the product layer.
     if (!window.confirm(`Revoke "${name}"? Any systems using this key will lose access immediately.`)) return
+    setRevokingId(keyId)
     try {
       await revoke.mutateAsync(keyId)
       toast.success(`"${name}" revoked`)
     } catch {
       toast.error("Failed to revoke key")
+    } finally {
+      setRevokingId(null)
     }
   }
 
@@ -71,7 +76,7 @@ export function ApiKeyList({ orgId }: ApiKeyListProps) {
                 variant="ghost"
                 size="sm"
                 className="text-fg-3 hover:text-error shrink-0"
-                disabled={revoke.isPending}
+                disabled={revoke.isPending && revokingId === key.id}
                 onClick={() => handleRevoke(key.id, key.name)}
               >
                 <Trash2 size={14} />
