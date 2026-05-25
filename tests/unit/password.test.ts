@@ -1,10 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { validatePassword, PASSWORD_RULES } from "@/lib/auth/password"
 
-// ── Individual rule coverage ──────────────────────────────────────────────────
-// Each case satisfies every rule except the one under test, proving rules are
-// independent and validatePassword correctly identifies which rule failed.
-
 describe("PASSWORD_RULES", () => {
   it.each([
     // [rule id,    passing input,   failing input]
@@ -19,23 +15,19 @@ describe("PASSWORD_RULES", () => {
   })
 })
 
-// ── validatePassword contract ─────────────────────────────────────────────────
-
 describe("validatePassword", () => {
   it("returns undefined when all rules pass", () => {
     expect(validatePassword("Abcdefg1!")).toBeUndefined()
   })
 
   it("returns the failing rule label — not undefined", () => {
-    // One rule fails at a time; others satisfied
-    expect(validatePassword("Abcd1!")).toBe("At least 8 characters")      // too short
-    expect(validatePassword("abcdefg1!")).toBe("One uppercase letter (A–Z)") // no uppercase
-    expect(validatePassword("Abcdefg!!")).toBe("One number (0–9)")          // no number
-    expect(validatePassword("Abcdefg1")).toBe("One special character (!@#…)") // no special
+    expect(validatePassword("Abcd1!")).toBe("At least 8 characters")
+    expect(validatePassword("abcdefg1!")).toBe("One uppercase letter (A–Z)")
+    expect(validatePassword("Abcdefg!!")).toBe("One number (0–9)")
+    expect(validatePassword("Abcdefg1")).toBe("One special character (!@#…)")
   })
 
   it("returns the first failing rule for an empty string", () => {
-    // Empty string fails all rules — first rule in the array wins
     const firstRule = PASSWORD_RULES[0]
     expect(validatePassword("")).toBe(firstRule.label)
   })

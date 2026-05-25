@@ -2,9 +2,8 @@ import { test as base, expect } from "@playwright/test"
 
 export { expect }
 
-// Auto-fixture: skips the entire test if auth credentials are not set.
-// This means CI passes cleanly even without TEST_USER_EMAIL / TEST_USER_PASSWORD — it
-// just reports authenticated tests as skipped rather than failing.
+// Auto-fixture: skips the entire test if no credentials are available.
+// Set TEST_USER_EMAIL and TEST_USER_PASSWORD in .env.local to run authenticated tests locally.
 export const test = base.extend<{ requireCredentials: void }>({
   requireCredentials: [
     async ({}, use) => {

@@ -12,7 +12,8 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: [
-    // Runs once — logs in and saves browser session to disk.
+    // Runs once — logs in with TEST_USER_EMAIL/TEST_USER_PASSWORD and saves
+    // the browser session to disk. Authenticated tests reuse this session.
     {
       name: "setup",
       testMatch: /auth\.setup\.ts/,

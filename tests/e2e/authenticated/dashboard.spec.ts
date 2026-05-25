@@ -22,6 +22,6 @@ test.describe("Dashboard", () => {
     const email = process.env.TEST_USER_EMAIL!
     await page.getByRole("button", { name: new RegExp(email.split("@")[0], "i") }).click()
     await page.getByRole("menuitem", { name: /sign out/i }).click()
-    await expect(page).toHaveURL(/\/auth\/login|\/login/, { timeout: 10_000 })
+    await expect(page).toHaveURL(/\/login/, { timeout: 10_000 })
   })
 })
