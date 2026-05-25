@@ -1,4 +1,4 @@
-import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 interface ErrorStateProps {
   code?: string
@@ -8,8 +8,6 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({ code, message, onRetry, onHome }: ErrorStateProps) {
-  const router = useRouter()
-
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
       <p className="font-semibold text-error">{code ?? "Error"}</p>
@@ -21,9 +19,9 @@ export function ErrorState({ code, message, onRetry, onHome }: ErrorStateProps) 
           </button>
         )}
         {onHome && (
-          <button type="button" onClick={() => router.push("/app/dashboard")} className="text-sm underline text-fg-3">
+          <Link href="/app/dashboard" className="text-sm underline text-fg-3">
             Go to dashboard
-          </button>
+          </Link>
         )}
       </div>
     </div>
