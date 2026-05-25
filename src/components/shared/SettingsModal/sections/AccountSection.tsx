@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SettingsCard } from "@/components/shared/SettingsModal/SettingsCard"
 
 const CONFIRMATION_PHRASE = "DELETE MY ACCOUNT"
 
@@ -50,29 +51,31 @@ export function AccountSection() {
         <p className="text-sm text-fg-3 mt-0.5">Manage your session and account data.</p>
       </div>
 
-      <div className="rounded-lg border border-border bg-surface p-4 flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm font-medium text-fg">Sign out of all devices</p>
-          <p className="text-xs text-fg-3 mt-1">Revokes all active sessions including this one.</p>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={signingOut}
-          onClick={handleSignOutAll}
-        >
-          {signingOut ? "Signing out…" : "Sign out everywhere"}
-        </Button>
-      </div>
+      <SettingsCard
+        title="Sign out of all devices"
+        description="Revokes all active sessions including this one."
+        action={
+          <Button variant="outline" size="sm" disabled={signingOut} onClick={handleSignOutAll}>
+            {signingOut ? "Signing out…" : "Sign out everywhere"}
+          </Button>
+        }
+      />
 
-      <div className="rounded-lg border border-error/40 bg-error/5 p-4 flex flex-col gap-4">
-        <div>
-          <p className="text-sm font-medium text-fg">Delete account</p>
-          <p className="text-xs text-fg-3 mt-1">
-            This action is permanent and cannot be undone. All your data will be deleted immediately.
-          </p>
-        </div>
-
+      <SettingsCard
+        title="Delete account"
+        description="This action is permanent and cannot be undone. All your data will be deleted immediately."
+        className="border-error/40 bg-error/5"
+        footer={
+          <Button
+            variant="destructive"
+            size="sm"
+            disabled={confirmation !== CONFIRMATION_PHRASE || deleteAccount.isPending}
+            onClick={handleDelete}
+          >
+            {deleteAccount.isPending ? "Deleting…" : "Delete my account"}
+          </Button>
+        }
+      >
         <div className="flex flex-col gap-1.5 max-w-xs">
           <Label htmlFor="confirm-delete" className="text-xs text-fg-3">
             Type <span className="font-mono text-fg">{CONFIRMATION_PHRASE}</span> to confirm
@@ -85,17 +88,7 @@ export function AccountSection() {
             className="font-mono text-xs"
           />
         </div>
-
-        <Button
-          variant="destructive"
-          size="sm"
-          className="self-start"
-          disabled={confirmation !== CONFIRMATION_PHRASE || deleteAccount.isPending}
-          onClick={handleDelete}
-        >
-          {deleteAccount.isPending ? "Deleting…" : "Delete my account"}
-        </Button>
-      </div>
+      </SettingsCard>
     </div>
   )
 }
