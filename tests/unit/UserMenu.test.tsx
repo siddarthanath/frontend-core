@@ -3,8 +3,10 @@ import { describe, it, expect, vi } from "vitest"
 import { UserMenu } from "@/components/shared/UserMenu"
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
-vi.mock("@/stores/auth", () => ({ useAuthStore: (s: (state: object) => unknown) => s({ currentOrg: null }) }))
-vi.mock("@/lib/api/billing", () => ({ useSubscription: () => ({ data: undefined }) }))
+vi.mock("@/lib/api/user", () => ({ useCurrentUser: () => ({ data: undefined }) }))
+vi.mock("@/stores/auth", () => ({ useAuthStore: () => ({ currentOrg: null, setUser: vi.fn() }) }))
+const mockUseSubscription = vi.fn().mockReturnValue({ data: undefined })
+vi.mock("@/lib/api/billing", () => ({ useSubscription: () => mockUseSubscription() }))
 vi.mock("@/lib/auth/client", () => ({ signOut: vi.fn() }))
 vi.mock("@/components/ui/dropdown-menu", () => ({
   DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -30,6 +32,16 @@ describe("UserMenu", () => {
     render(<UserMenu email="sid@example.com" displayName="Siddartha" collapsed={false} />)
     expect(screen.getByText("Siddartha")).toBeInTheDocument()
     expect(screen.getByText("Free plan")).toBeInTheDocument()
+  })
+
+  it.each([
+    ["pro",        "Pro plan"],
+    ["max",        "Max plan"],
+    ["enterprise", "Enterprise plan"],
+  ] as const)("shows correct label for %s plan", (plan, label) => {
+    mockUseSubscription.mockReturnValueOnce({ data: { plan } })
+    render(<UserMenu email="sid@example.com" displayName="Sid" collapsed={false} />)
+    expect(screen.getByText(label)).toBeInTheDocument()
   })
 
   it("renders collapsed trigger without name or plan text", () => {

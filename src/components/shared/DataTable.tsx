@@ -106,7 +106,9 @@ export function DataTable<TData>({
                   >
                     {header.isPlaceholder ? null : canSort ? (
                       <button
+                        type="button"
                         onClick={header.column.getToggleSortingHandler()}
+                        aria-label={`Sort by ${typeof header.column.columnDef.header === "string" ? header.column.columnDef.header : header.id}`}
                         className="flex items-center gap-1 hover:text-fg transition-colors"
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}

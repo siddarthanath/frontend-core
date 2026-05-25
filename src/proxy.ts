@@ -20,20 +20,20 @@ export async function proxy(request: NextRequest) {
     }
   )
 
-  // Refresh session — MUST happen before any redirect logic
+  // Refresh session — use getUser (not getSession) to revalidate the JWT against Supabase
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
   const { pathname } = request.nextUrl
 
   // Protect all /app/* routes — redirect unauthenticated users to login
-  if (pathname.startsWith("/app") && !session) {
+  if (pathname.startsWith("/app") && !user) {
     return NextResponse.redirect(new URL("/login", request.url))
   }
 
   // Redirect authenticated users away from auth pages
-  if (session && (pathname === "/login" || pathname === "/signup")) {
+  if (user && (pathname === "/login" || pathname === "/signup")) {
     return NextResponse.redirect(new URL("/app/dashboard", request.url))
   }
 

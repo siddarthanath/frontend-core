@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/playwright/.auth
+/playwright-report
+/test-results
 
 # next.js
 /.next/
@@ -42,3 +45,4 @@ yarn-error.log*
 next-env.d.ts
 CLAUDE.md
 AGENTS.md
+SPEC.md

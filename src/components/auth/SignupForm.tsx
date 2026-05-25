@@ -10,11 +10,16 @@ import { Label } from "@/components/ui/label"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/auth/client"
 import { GoogleButton, MicrosoftButton } from "@/components/auth/OAuthButton"
+import { PasswordChecklist } from "@/components/auth/PasswordChecklist"
+import { validatePassword } from "@/lib/auth/password"
 
 const schema = z.object({
   full_name: z.string().min(1, "Enter your name"),
   email: z.string().email("Enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().superRefine((val, ctx) => {
+    const error = validatePassword(val)
+    if (error) ctx.addIssue({ code: z.ZodIssueCode.custom, message: error })
+  }),
 })
 
 type FormData = z.infer<typeof schema>
@@ -28,8 +33,11 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) })
+
+  const passwordValue = watch("password", "")
 
   async function onSubmit(data: FormData) {
     // Account linking: if this email already exists via Google/Microsoft OAuth, Supabase will
@@ -83,10 +91,9 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
           autoComplete="new-password"
           {...register("password")}
         />
+        <PasswordChecklist password={passwordValue} />
         {errors.password && (
-          <p className="text-sm text-error">
-            {errors.password.message}
-          </p>
+          <p className="text-sm text-error">{errors.password.message}</p>
         )}
       </div>
       <Button type="submit" disabled={isSubmitting} className="w-full">

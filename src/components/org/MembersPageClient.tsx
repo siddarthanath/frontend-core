@@ -28,7 +28,7 @@ export function MembersPageClient() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold text-fg">Members</h1>
-          <p className="text-sm text-fg-2 mt-1">{currentOrg!.name}</p>
+          <p className="text-sm text-fg-2 mt-1">{currentOrg?.name}</p>
         </div>
         {canInvite && (
           <Button onClick={() => setInviteOpen(true)} className="flex items-center gap-2">
@@ -39,13 +39,13 @@ export function MembersPageClient() {
       </div>
 
       <MemberList
-        orgId={currentOrg!.id}
+        orgId={currentOrg?.id ?? ""}
         currentUserRole={currentUserRole}
         currentUserId={user?.id ?? ""}
       />
 
       <InviteModal
-        orgId={currentOrg!.id}
+        orgId={currentOrg?.id ?? ""}
         open={inviteOpen}
         onClose={() => setInviteOpen(false)}
       />

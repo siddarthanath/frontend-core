@@ -5,6 +5,7 @@ import { type ColumnDef } from "@tanstack/react-table"
 import { useAuditLog } from "@/lib/api/audit"
 import { useAuthStore } from "@/stores/auth"
 import { DataTable } from "@/components/shared/DataTable"
+import { ErrorState } from "@/components/shared/ErrorState"
 import type { AuditLogResponse } from "@/types/audit"
 
 const PAGE_SIZE = 20
@@ -72,7 +73,9 @@ export function AuditLogTable() {
   const { currentOrg } = useAuthStore()
   const orgId = currentOrg?.id ?? ""
   const [offset, setOffset] = useState(0)
-  const { data, isLoading } = useAuditLog(orgId, offset, PAGE_SIZE)
+  const { data, isLoading, isError, refetch } = useAuditLog(orgId, offset, PAGE_SIZE)
+
+  if (isError) return <ErrorState message="Failed to load audit log." onRetry={() => refetch()} />
 
   return (
     <DataTable

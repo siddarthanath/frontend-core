@@ -115,8 +115,10 @@ export function FeatureFlagList({ orgId }: FeatureFlagListProps) {
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button
+                  type="button"
                   onClick={() => handleToggle(flag.key, flag.enabled, flag.description)}
                   disabled={upsert.isPending}
+                  aria-label={`${flag.enabled ? "Disable" : "Enable"} ${flag.key}`}
                   className={cn(
                     "rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors",
                     flag.enabled

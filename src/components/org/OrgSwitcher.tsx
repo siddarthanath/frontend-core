@@ -23,6 +23,8 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
+          type="button"
+          aria-label={`Switch organisation — current: ${currentOrg?.name ?? "none"}`}
           className={cn(
             "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm w-full transition-colors",
             "text-fg-2 hover:bg-bg-2 hover:text-fg",

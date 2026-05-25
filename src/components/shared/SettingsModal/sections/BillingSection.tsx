@@ -7,6 +7,7 @@ import { useSubscription, useCreatePortal } from "@/lib/api/billing"
 import { PlanBadge } from "@/components/billing/PlanBadge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
+import { ErrorState } from "@/components/shared/ErrorState"
 import { useAuthStore } from "@/stores/auth"
 
 export function BillingSection() {
@@ -14,7 +15,7 @@ export function BillingSection() {
   const { currentOrg } = useAuthStore()
   const orgId = currentOrg?.id ?? ""
 
-  const { data: subscription, isLoading } = useSubscription(orgId)
+  const { data: subscription, isLoading, isError, refetch } = useSubscription(orgId)
   const createPortal = useCreatePortal(orgId)
 
   async function handlePortal() {
@@ -25,6 +26,8 @@ export function BillingSection() {
       toast.error("Failed to open billing portal")
     }
   }
+
+  if (isError) return <ErrorState message="Failed to load billing info." onRetry={() => refetch()} />
 
   return (
     <div className="flex flex-col gap-6">

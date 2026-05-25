@@ -69,7 +69,7 @@ export function BillingPageClient() {
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-xl font-semibold text-fg">Billing</h1>
-            <p className="text-sm text-fg-2 mt-1">{currentOrg!.name}</p>
+            <p className="text-sm text-fg-2 mt-1">{currentOrg?.name}</p>
           </div>
           {subscription?.stripe_subscription_id && (
             <div className="flex items-center gap-2">
