@@ -7,6 +7,7 @@ import { useUpdatePassword, useUpdateEmail } from "@/lib/api/user"
 import { createClient } from "@/lib/auth/client"
 import { validatePassword } from "@/lib/auth/password"
 import { cn } from "@/lib/utils"
+import { FieldError } from "@/components/shared/FeedbackStates/FieldError"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -99,9 +100,7 @@ export function SecuritySection() {
                   className={cn(currentPasswordError && "border-error focus-visible:ring-error")}
                   required
                 />
-                {currentPasswordError && (
-                  <p className="text-xs text-error">{currentPasswordError}</p>
-                )}
+                <FieldError message={currentPasswordError} />
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -121,9 +120,7 @@ export function SecuritySection() {
                   className={cn(newPasswordError && "border-error focus-visible:ring-error")}
                   required
                 />
-                {newPasswordError && (
-                  <p className="text-xs text-error">{newPasswordError}</p>
-                )}
+                <FieldError message={newPasswordError} />
               </div>
             </div>
           </SettingsCard>
