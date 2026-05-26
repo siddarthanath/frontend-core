@@ -63,7 +63,7 @@ export function AccountSection() {
 
       <SettingsCard
         title="Delete account"
-        description="This action is permanent and cannot be undone. All your data will be deleted immediately."
+        description="This action is permanent and cannot be undone. Your data will be anonymised immediately and account deactivated."
         className="border-error/40 bg-error/5"
         footer={
           <Button

@@ -7,7 +7,7 @@ import { useSubscription, useCreatePortal } from "@/lib/api/billing"
 import { PlanBadge } from "@/components/billing/PlanBadge"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
-import { ErrorState } from "@/components/shared/ErrorState"
+import { ErrorState } from "@/components/shared/FeedbackStates/ErrorState"
 import { SettingsCard } from "@/components/shared/SettingsModal/SettingsCard"
 import { useAuthStore } from "@/stores/auth"
 

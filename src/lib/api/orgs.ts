@@ -98,3 +98,14 @@ export function useRemoveMember(orgId: string) {
     onSuccess: () => qc.invalidateQueries({ queryKey: orgKeys.members(orgId) }),
   })
 }
+
+export function useTransferOwnership(orgId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (newOwnerId: string) =>
+      api
+        .post(`api/v1/orgs/${orgId}/transfer-ownership`, { json: { new_owner_id: newOwnerId } })
+        .json<MemberResponse>(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: orgKeys.members(orgId) }),
+  })
+}
