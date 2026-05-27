@@ -16,5 +16,11 @@ export function createClient() {
 }
 
 export async function signOut(): Promise<void> {
-  await createClient().auth.signOut()
+  const { error } = await createClient().auth.signOut()
+  if (error) throw error
+}
+
+export async function signOutAll(): Promise<void> {
+  const { error } = await createClient().auth.signOut({ scope: "global" })
+  if (error) throw error
 }

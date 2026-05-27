@@ -37,6 +37,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const passwordValue = watch("password", "")
 
   async function onSubmit(data: FormData) {

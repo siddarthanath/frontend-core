@@ -10,21 +10,31 @@ import { useSubscription, useCreateCheckout, useCreatePortal, useUpgradeSubscrip
 import { PricingCard } from "@/components/billing/PricingCard"
 import { PLAN_CONFIGS, PLAN_ORDER } from "@/types/billing"
 import type { BillingPeriod, Plan } from "@/types/billing"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
 interface PlansPageClientProps {
   defaultReturnTo?: string
 }
 
-export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageClientProps) {
+export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: PlansPageClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const raw = searchParams.get("returnTo") ?? defaultReturnTo
   // Reject absolute URLs to prevent open-redirect attacks
   const returnTo = raw.startsWith("/") && !raw.startsWith("//") ? raw : defaultReturnTo
   const [period, setPeriod] = useState<BillingPeriod>("monthly")
+  const [confirmFreeOpen, setConfirmFreeOpen] = useState(false)
 
   const closeSettings = useUiStore((s) => s.closeSettings)
-  const { data: me, isLoading: meLoading } = useCurrentUser()
+  const { data: me } = useCurrentUser()
   const orgId = me?.org_id ?? ""
   const { data: subscription } = useSubscription(orgId)
   const createCheckout = useCreateCheckout(orgId)
@@ -51,8 +61,12 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
         } catch {
           toast.error("Failed to upgrade plan")
         }
+      } else if (plan === "free") {
+        // Downgrade to free — confirm before sending to Stripe portal
+        setConfirmFreeOpen(true)
+        return
       } else {
-        // Downgrade or same plan — send to Stripe portal
+        // Same plan or other downgrade — send to Stripe portal
         try {
           const { portal_url } = await createPortal.mutateAsync({
             return_url: `${window.location.origin}${returnTo}`,
@@ -90,7 +104,54 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
     }
   }
 
+  async function confirmDowngradeToFree() {
+    try {
+      const { portal_url } = await createPortal.mutateAsync({
+        return_url: `${window.location.origin}${returnTo}`,
+      })
+      setConfirmFreeOpen(false)
+      closeSettings()
+      window.location.assign(portal_url)
+    } catch {
+      toast.error("Failed to open billing portal")
+    }
+  }
+
+  const periodEndLabel = subscription?.current_period_end
+    ? new Date(subscription.current_period_end).toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null
+
   return (
+    <>
+    <Dialog open={confirmFreeOpen} onOpenChange={setConfirmFreeOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Downgrade to Free?</DialogTitle>
+          <DialogDescription>
+            To cancel your subscription you{"'"}ll be taken to Stripe.
+            {periodEndLabel && (
+              <> You{"'"}ll keep access to your current plan until <strong suppressHydrationWarning>{periodEndLabel}</strong>.</>
+            )}
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setConfirmFreeOpen(false)}>
+            Stay on {subscription?.plan ?? "current plan"}
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={confirmDowngradeToFree}
+            disabled={createPortal.isPending}
+          >
+            Cancel subscription
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
     <div className="w-full max-w-4xl flex flex-col gap-8">
       <div className="text-center">
         <h1 className="text-xl font-bold text-fg">Choose a plan</h1>
@@ -132,17 +193,15 @@ export function PlansPageClient({ defaultReturnTo = "/app/billing" }: PlansPageC
             description={description}
             features={features}
             isFeatured={featured}
-            isCurrentPlan={subscription?.plan === plan}
+            isCurrentPlan={subscription?.plan === plan && plan !== "free"}
             showYearlyBanner={period === "yearly"}
             onUpgrade={contactUs ? () => handleUpgrade("enterprise") : () => handleUpgrade(plan)}
-            loading={meLoading || createCheckout.isPending || createPortal.isPending || upgradeSubscription.isPending}
+            loading={createCheckout.isPending || createPortal.isPending || upgradeSubscription.isPending}
           />
         ))}
       </div>
 
-      <p className="text-center text-xs text-fg-3">
-        Free plan selected by default — no card required.
-      </p>
     </div>
+    </>
   )
 }

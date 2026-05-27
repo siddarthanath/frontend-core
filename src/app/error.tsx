@@ -1,6 +1,6 @@
 "use client"
 
-import { ErrorState } from "@/components/shared/ErrorState"
+import { ErrorState } from "@/components/shared/FeedbackStates/ErrorState"
 
 export default function Error({ reset }: { reset: () => void }) {
   return (

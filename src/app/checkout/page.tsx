@@ -4,7 +4,7 @@ import { PlansPageClient } from "@/components/billing/PlansPageClient"
 export default function CheckoutPage() {
   return (
     <Suspense>
-      <PlansPageClient />
+      <PlansPageClient defaultReturnTo="/app/dashboard" />
     </Suspense>
   )
 }

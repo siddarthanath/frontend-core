@@ -27,6 +27,11 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  // Maintenance mode — redirect everything except the maintenance page itself
+  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE?.toLowerCase() === "true" && pathname !== "/maintenance") {
+    return NextResponse.redirect(new URL("/maintenance", request.url))
+  }
+
   // Protect all authenticated routes — redirect unauthenticated users to login
   const isProtected =
     pathname.startsWith("/app") ||

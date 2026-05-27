@@ -14,20 +14,18 @@ test.describe("Profile — General settings", () => {
     await expect(emailInput).toHaveValue(process.env.TEST_USER_EMAIL!)
   })
 
+  test("shows hint to use Security tab for email and password changes", async ({ page }) => {
+    await expect(page.getByText(/to change your email or password, go to security/i)).toBeVisible()
+  })
+
+  test("does not show change password field in General", async ({ page }) => {
+    await expect(page.getByLabel(/new password/i)).not.toBeVisible()
+  })
+
   test("updates first and last name successfully", async ({ page }) => {
     await page.getByLabel(/first name/i).fill("Test")
     await page.getByLabel(/last name/i).fill("User")
     await page.getByRole("button", { name: /save changes/i }).click()
     await expect(page.getByText(/profile updated/i)).toBeVisible({ timeout: 6_000 })
-  })
-
-  test("rejects password shorter than 8 characters", async ({ page }) => {
-    await page.getByLabel(/new password/i).fill("short")
-    await page.getByRole("button", { name: /update password/i }).click()
-    await expect(page.getByText(/at least 8 characters/i)).toBeVisible({ timeout: 4_000 })
-  })
-
-  test("update password button is disabled when field is empty", async ({ page }) => {
-    await expect(page.getByRole("button", { name: /update password/i })).toBeDisabled()
   })
 })

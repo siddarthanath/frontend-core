@@ -2,7 +2,7 @@
 
 import { Building2 } from "lucide-react"
 import { useAuthStore } from "@/stores/auth"
-import { EmptyState } from "@/components/shared/EmptyState"
+import { EmptyState } from "@/components/shared/FeedbackStates/EmptyState"
 
 interface RequireOrgProps {
   children: React.ReactNode

@@ -5,10 +5,10 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 import { NAV_ITEMS } from "@/types/nav"
 import { useAuthStore } from "@/stores/auth"
-import { OrgSwitcher } from "@/components/org/OrgSwitcher"
 import { UserMenu } from "@/components/shared/UserMenu"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
 
@@ -32,6 +32,9 @@ export function MobileHeader() {
           </button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0 bg-surface border-border flex flex-col">
+          <VisuallyHidden.Root>
+            <SheetTitle>Navigation</SheetTitle>
+          </VisuallyHidden.Root>
           {/* Logo */}
           <div
             className="flex items-center gap-2 px-4 border-b border-border shrink-0"
@@ -68,11 +71,6 @@ export function MobileHeader() {
               )
             })}
           </nav>
-
-          {/* Org switcher — above footer border */}
-          <div className="px-2 py-1">
-            <OrgSwitcher collapsed={false} />
-          </div>
 
           {/* User row */}
           <div className="border-t border-border">
