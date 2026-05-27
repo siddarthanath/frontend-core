@@ -39,7 +39,11 @@ export function SecuritySection() {
       password: currentPassword,
     })
     if (authError) {
-      setCurrentPasswordError("Incorrect password")
+      if (authError.status === 400) {
+        setCurrentPasswordError("Incorrect password")
+      } else {
+        toast.error(authError.message || "Failed to verify password")
+      }
       return
     }
 

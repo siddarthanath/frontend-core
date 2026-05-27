@@ -29,10 +29,10 @@ export default function MaintenancePage() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <h1 className="text-xl font-semibold text-fg">We'll be right back</h1>
+          <h1 className="text-xl font-semibold text-fg">We&apos;ll be right back</h1>
           <p className="text-sm text-fg-3 leading-relaxed">
-            We're performing scheduled maintenance. Your data is safe and
-            we'll be back up shortly.
+            We&apos;re performing scheduled maintenance. Your data is safe and
+            we&apos;ll be back up shortly.
           </p>
         </div>
 

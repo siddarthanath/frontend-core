@@ -29,8 +29,9 @@ export function OrgSwitcher({ collapsed = false }: OrgSwitcherProps) {
   // Safety net: if the settings modal opens before useAutoSelectOrg has fired on the
   // current page, currentOrg may still be null. Auto-select the first org here.
   useEffect(() => {
-    if (!currentOrg && orgs.length > 0) {
-      setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
+    if (orgs.length > 0) {
+      const exists = orgs.some((o) => o.id === currentOrg?.id)
+      if (!exists) setCurrentOrg({ id: orgs[0].id, name: orgs[0].name })
     }
   }, [orgs, currentOrg, setCurrentOrg])
 

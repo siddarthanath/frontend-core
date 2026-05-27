@@ -28,7 +28,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Maintenance mode — redirect everything except the maintenance page itself
-  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true" && pathname !== "/maintenance") {
+  if (process.env.NEXT_PUBLIC_MAINTENANCE_MODE?.toLowerCase() === "true" && pathname !== "/maintenance") {
     return NextResponse.redirect(new URL("/maintenance", request.url))
   }
 

@@ -29,6 +29,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       const res = await fetch(`${apiUrl}/api/v1/user/me`, {
         headers: { Authorization: `Bearer ${session.access_token}` },
         next: { revalidate: 0 },
+        signal: AbortSignal.timeout(5000),
       })
       if (res.ok) {
         const me: UserMeResponse = await res.json()

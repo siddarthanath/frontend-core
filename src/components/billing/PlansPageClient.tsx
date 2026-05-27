@@ -134,7 +134,7 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
           <DialogDescription>
             To cancel your subscription you{"'"}ll be taken to Stripe.
             {periodEndLabel && (
-              <> You{"'"}ll keep access to your current plan until <strong>{periodEndLabel}</strong>.</>
+              <> You{"'"}ll keep access to your current plan until <strong suppressHydrationWarning>{periodEndLabel}</strong>.</>
             )}
           </DialogDescription>
         </DialogHeader>

@@ -77,7 +77,7 @@ export function BillingSection() {
             <span className="text-xs text-fg-3">Cancels at period end</span>
           )}
           {subscription?.current_period_end && !subscription.cancel_at_period_end && (
-            <span className="text-xs text-fg-3">
+            <span className="text-xs text-fg-3" suppressHydrationWarning>
               Renews {new Date(subscription.current_period_end).toLocaleDateString(undefined)}
             </span>
           )}
