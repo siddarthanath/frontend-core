@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
+import { useAuthStore } from "@/stores/auth"
 import type { UserMeResponse, UpdateProfileBody } from "@/types/user"
 
 export type { UserMeResponse, UpdateProfileBody }
@@ -28,7 +29,11 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: (body: UpdateProfileBody) =>
       api.patch("api/v1/user/me", { json: body }).json<UserMeResponse>(),
-    onSuccess: () => qc.invalidateQueries({ queryKey: userKeys.me }),
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: userKeys.me })
+      const name = [data.first_name, data.last_name].filter(Boolean).join(" ") || null
+      useAuthStore.getState().setDisplayName(name)
+    },
   })
 }
 

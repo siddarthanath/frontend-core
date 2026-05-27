@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 // process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true"
 export default function MaintenancePage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-bg px-4">
       <div className="max-w-md w-full text-center flex flex-col items-center gap-6">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-border bg-bg-2">
           <svg

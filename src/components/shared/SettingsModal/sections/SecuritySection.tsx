@@ -131,29 +131,31 @@ export function SecuritySection() {
         </form>
       )}
 
-      <form onSubmit={(e) => { e.preventDefault(); handleEmailUpdate() }}>
-        <SettingsCard
-          title="Change email"
-          description="A confirmation link will be sent to your new address."
-          footer={
-            <Button type="submit" size="sm" disabled={!newEmail || updateEmail.isPending}>
-              {updateEmail.isPending ? "Sending…" : "Update email"}
-            </Button>
-          }
-        >
-          <div className="flex flex-col gap-1.5 max-w-xs">
-            <Label htmlFor="new-email">New email</Label>
-            <Input
-              id="new-email"
-              type="email"
-              value={newEmail}
-              onChange={(e) => setNewEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-        </SettingsCard>
-      </form>
+      {hasEmailProvider && (
+        <form onSubmit={(e) => { e.preventDefault(); handleEmailUpdate() }}>
+          <SettingsCard
+            title="Change email"
+            description="A confirmation link will be sent to your new address."
+            footer={
+              <Button type="submit" size="sm" disabled={!newEmail || updateEmail.isPending}>
+                {updateEmail.isPending ? "Sending…" : "Update email"}
+              </Button>
+            }
+          >
+            <div className="flex flex-col gap-1.5 max-w-xs">
+              <Label htmlFor="new-email">New email</Label>
+              <Input
+                id="new-email"
+                type="email"
+                value={newEmail}
+                onChange={(e) => setNewEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+          </SettingsCard>
+        </form>
+      )}
 
       <SettingsCard
         title="Two-factor authentication"

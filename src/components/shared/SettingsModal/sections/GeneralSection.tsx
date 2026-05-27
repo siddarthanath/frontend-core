@@ -91,6 +91,7 @@ function GeneralForm({ me }: { me: UserMeResponse }) {
         </div>
       </SettingsCard>
 
+      {/* To add workspace creation UI: expose a form calling useCreateOrg() → POST /api/v1/orgs with name + slug. Product-layer feature. */}
       <MembersCard userId={user?.id ?? ""} />
     </div>
   )
@@ -140,7 +141,7 @@ function InviteForm({ orgId }: { orgId: string }) {
   const [emailError, setEmailError] = useState<string | null>(null)
   const invite = useInviteMember(orgId)
 
-  async function handleInvite(e: React.FormEvent<HTMLFormElement>) {
+  async function handleInvite(e: { preventDefault: () => void }) {
     e.preventDefault()
     setEmailError(null)
     try {

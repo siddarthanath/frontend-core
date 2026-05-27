@@ -193,7 +193,7 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
             description={description}
             features={features}
             isFeatured={featured}
-            isCurrentPlan={subscription?.plan === plan && plan !== "free"}
+            isCurrentPlan={subscription?.plan === plan}
             showYearlyBanner={period === "yearly"}
             onUpgrade={contactUs ? () => handleUpgrade("enterprise") : () => handleUpgrade(plan)}
             loading={createCheckout.isPending || createPortal.isPending || upgradeSubscription.isPending}
