@@ -2,15 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import type { MemberResponse, OrgResponse, OrgRole } from "@/types/org"
 
-// ── Query keys ────────────────────────────────────────────────────────────────
-
 export const orgKeys = {
   all: ["orgs"] as const,
   detail: (id: string) => ["orgs", id] as const,
   members: (id: string) => ["orgs", id, "members"] as const,
 }
-
-// ── Queries ───────────────────────────────────────────────────────────────────
 
 export function useOrgs() {
   return useQuery({
@@ -34,8 +30,6 @@ export function useOrgMembers(orgId: string) {
     enabled: !!orgId,
   })
 }
-
-// ── Mutations ─────────────────────────────────────────────────────────────────
 
 export function useCreateOrg() {
   const qc = useQueryClient()

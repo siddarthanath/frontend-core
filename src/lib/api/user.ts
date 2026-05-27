@@ -5,13 +5,9 @@ import type { UserMeResponse, UpdateProfileBody } from "@/types/user"
 
 export type { UserMeResponse, UpdateProfileBody }
 
-// ── Query keys ────────────────────────────────────────────────────────────────
-
 export const userKeys = {
   me: ["user", "me"] as const,
 }
-
-// ── Queries ───────────────────────────────────────────────────────────────────
 
 /** Fetches /user/me — triggers personal org creation on first call (B2C). */
 export function useCurrentUser() {
@@ -21,8 +17,6 @@ export function useCurrentUser() {
     staleTime: 5 * 60 * 1000,
   })
 }
-
-// ── Mutations ─────────────────────────────────────────────────────────────────
 
 export function useUpdateProfile() {
   const qc = useQueryClient()

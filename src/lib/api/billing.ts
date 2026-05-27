@@ -2,13 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import type { BillingPeriod, CheckoutResponse, Plan, PortalResponse, SubscriptionResponse } from "@/types/billing"
 
-// ── Query keys ────────────────────────────────────────────────────────────────
-
 export const billingKeys = {
   subscription: (orgId: string) => ["billing", orgId, "subscription"] as const,
 }
-
-// ── Queries ───────────────────────────────────────────────────────────────────
 
 export function useSubscription(orgId: string) {
   return useQuery({
@@ -17,8 +13,6 @@ export function useSubscription(orgId: string) {
     enabled: !!orgId,
   })
 }
-
-// ── Mutations ─────────────────────────────────────────────────────────────────
 
 export function useCreateCheckout(orgId: string) {
   const qc = useQueryClient()
