@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckCircle2, Circle } from "lucide-react"
+import { CheckCircle2, XCircle } from "lucide-react"
 import { PASSWORD_RULES } from "@/lib/auth/password"
 
 interface PasswordChecklistProps {
@@ -19,9 +19,9 @@ export function PasswordChecklist({ password }: PasswordChecklistProps) {
             {passed ? (
               <CheckCircle2 className="size-3.5 text-green-500 shrink-0" />
             ) : (
-              <Circle className="size-3.5 text-fg-3 shrink-0" />
+              <XCircle className="size-3.5 text-error shrink-0" />
             )}
-            <span className={passed ? "text-green-500" : "text-fg-3"}>{rule.label}</span>
+            <span className={passed ? "text-green-500" : "text-error"}>{rule.label}</span>
           </li>
         )
       })}

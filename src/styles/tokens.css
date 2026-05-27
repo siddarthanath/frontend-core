@@ -169,10 +169,10 @@
   --color-brand-dim:              var(--brand-dim);
   --color-brand-border:           var(--brand-border);
   --color-brand-fg:               var(--brand-fg);
-  --color-success:                var(--color-success);
-  --color-warning:                var(--color-warning);
-  --color-error:                  var(--color-error);
-  --color-info:                   var(--color-info);
+  --color-success:                var(--accent-green);
+  --color-warning:                var(--brand);
+  --color-error:                  var(--accent-red);
+  --color-info:                   var(--accent-blue);
 
   /* shadcn aliases — bg-primary, text-primary-foreground, etc. */
   --color-background:             var(--background);

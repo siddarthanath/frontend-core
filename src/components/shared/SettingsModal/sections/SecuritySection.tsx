@@ -8,6 +8,7 @@ import { createClient } from "@/lib/auth/client"
 import { validatePassword } from "@/lib/auth/password"
 import { cn } from "@/lib/utils"
 import { FieldError } from "@/components/shared/FeedbackStates/FieldError"
+import { PasswordChecklist } from "@/components/auth/PasswordChecklist"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -117,13 +118,11 @@ export function SecuritySection() {
                     setNewPassword(e.target.value)
                     setNewPasswordError(null)
                   }}
-                  onBlur={() => {
-                    if (newPassword) setNewPasswordError(validatePassword(newPassword) ?? null)
-                  }}
                   placeholder="••••••••"
                   className={cn(newPasswordError && "border-error focus-visible:ring-error")}
                   required
                 />
+                <PasswordChecklist password={newPassword} />
                 <FieldError message={newPasswordError} />
               </div>
             </div>

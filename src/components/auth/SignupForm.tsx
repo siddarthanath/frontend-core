@@ -11,10 +11,12 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/auth/client"
 import { GoogleButton, MicrosoftButton } from "@/components/auth/OAuthButton"
 import { PasswordChecklist } from "@/components/auth/PasswordChecklist"
+import { FieldError } from "@/components/shared/FeedbackStates/FieldError"
 import { validatePassword } from "@/lib/auth/password"
 
 const schema = z.object({
-  full_name: z.string().min(1, "Enter your name"),
+  first_name: z.string().min(1, "Enter your first name"),
+  last_name: z.string().min(1, "Enter your last name"),
   email: z.string().email("Enter a valid email"),
   password: z.string().superRefine((val, ctx) => {
     const error = validatePassword(val)
@@ -50,7 +52,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
       password: data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
-        data: { full_name: data.full_name },
+        data: { first_name: data.first_name, last_name: data.last_name },
       },
     })
     if (error) {
@@ -68,21 +70,22 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="full_name">Full name</Label>
-        <Input id="full_name" type="text" autoComplete="name" {...register("full_name")} />
-        {errors.full_name && (
-          <p className="text-sm text-error">{errors.full_name.message}</p>
-        )}
+      <div className="flex gap-3">
+        <div className="flex flex-col gap-1.5 flex-1">
+          <Label htmlFor="first_name">First name</Label>
+          <Input id="first_name" type="text" autoComplete="given-name" {...register("first_name")} />
+          <FieldError message={errors.first_name?.message ?? null} />
+        </div>
+        <div className="flex flex-col gap-1.5 flex-1">
+          <Label htmlFor="last_name">Last name</Label>
+          <Input id="last_name" type="text" autoComplete="family-name" {...register("last_name")} />
+          <FieldError message={errors.last_name?.message ?? null} />
+        </div>
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" autoComplete="email" {...register("email")} />
-        {errors.email && (
-          <p className="text-sm text-error">
-            {errors.email.message}
-          </p>
-        )}
+        <FieldError message={errors.email?.message ?? null} />
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="password">Password</Label>
@@ -93,9 +96,6 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
           {...register("password")}
         />
         <PasswordChecklist password={passwordValue} />
-        {errors.password && (
-          <p className="text-sm text-error">{errors.password.message}</p>
-        )}
       </div>
       <Button type="submit" disabled={isSubmitting} className="w-full">
         {isSubmitting ? "Creating account…" : "Create account"}

@@ -9,6 +9,7 @@ interface PricingCardProps {
   description: string
   features: string[]
   isCurrentPlan: boolean
+  isCancelling?: boolean
   isFeatured?: boolean
   showYearlyBanner?: boolean
   onUpgrade?: () => void
@@ -21,6 +22,7 @@ export function PricingCard({
   description,
   features,
   isCurrentPlan,
+  isCancelling = false,
   isFeatured = false,
   showYearlyBanner = false,
   onUpgrade,
@@ -73,6 +75,8 @@ export function PricingCard({
       >
         {isCurrentPlan
           ? "Current plan"
+          : isCancelling
+          ? "Reactivate"
           : isEnterprise
           ? "Contact us"
           : isFree

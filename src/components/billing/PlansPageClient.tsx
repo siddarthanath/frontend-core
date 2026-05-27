@@ -132,15 +132,15 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
         <DialogHeader>
           <DialogTitle>Downgrade to Free?</DialogTitle>
           <DialogDescription>
-            To cancel your subscription you{"'"}ll be taken to Stripe.
+            To cancel your subscription you&apos;ll be taken to Stripe.
             {periodEndLabel && (
-              <> You{"'"}ll keep access to your current plan until <strong suppressHydrationWarning>{periodEndLabel}</strong>.</>
+              <> You&apos;ll keep access to your current plan until <strong suppressHydrationWarning>{periodEndLabel}</strong>.</>
             )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => setConfirmFreeOpen(false)}>
-            Stay on {subscription?.plan ?? "current plan"}
+            {`Stay on ${((subscription?.plan ?? "free") as string).charAt(0).toUpperCase()}${((subscription?.plan ?? "free") as string).slice(1)}`}
           </Button>
           <Button
             variant="destructive"
@@ -193,7 +193,8 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
             description={description}
             features={features}
             isFeatured={featured}
-            isCurrentPlan={subscription?.plan === plan}
+            isCurrentPlan={subscription?.plan === plan && !subscription?.cancel_at_period_end}
+            isCancelling={subscription?.cancel_at_period_end === true && subscription?.plan === plan}
             showYearlyBanner={period === "yearly"}
             onUpgrade={contactUs ? () => handleUpgrade("enterprise") : () => handleUpgrade(plan)}
             loading={createCheckout.isPending || createPortal.isPending || upgradeSubscription.isPending}
