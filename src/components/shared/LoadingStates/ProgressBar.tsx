@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react"
 import { cn } from "@/lib/utils"
 
 interface ProgressBarProps {
@@ -18,11 +19,9 @@ export function ProgressBar({ value, max = 100, className, label }: ProgressBarP
       aria-valuemax={max}
       aria-label={label}
       className={cn("h-1.5 w-full rounded-full bg-bg-2 overflow-hidden", className)}
+      style={{ "--progress": `${percent}%` } as CSSProperties}
     >
-      <div
-        className="h-full rounded-full bg-brand transition-all duration-300"
-        style={{ width: `${percent}%` }}
-      />
+      <div className="h-full rounded-full bg-brand transition-all duration-300 w-(--progress)" />
     </div>
   )
 }

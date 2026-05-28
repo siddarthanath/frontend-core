@@ -8,7 +8,7 @@ import { useUiStore } from "@/stores/ui"
 import { useCurrentUser } from "@/lib/api/user"
 import { useSubscription, useCreateCheckout, useCreatePortal, useUpgradeSubscription } from "@/lib/api/billing"
 import { PricingCard } from "@/components/billing/PricingCard"
-import { PLAN_CONFIGS, PLAN_ORDER } from "@/types/billing"
+import { PLAN_CONFIGS, PLAN_LABELS, PLAN_ORDER } from "@/types/billing"
 import type { BillingPeriod, Plan } from "@/types/billing"
 import {
   Dialog,
@@ -140,7 +140,7 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => setConfirmFreeOpen(false)}>
-            {`Stay on ${((subscription?.plan ?? "free") as string).charAt(0).toUpperCase()}${((subscription?.plan ?? "free") as string).slice(1)}`}
+            {`Stay on ${PLAN_LABELS[subscription?.plan ?? "free"]}`}
           </Button>
           <Button
             variant="destructive"

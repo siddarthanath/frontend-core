@@ -32,8 +32,9 @@ export function SettingsModal() {
   useEffect(() => {
     const hash = window.location.hash.slice(1)
     if (hash.startsWith("settings")) {
-      const section = hash.split("-")[1] as SettingsSection
-      openSettings(VALID_SECTIONS.includes(section) ? section : "general")
+      const rawSection = hash.split("-")[1]
+      const section = VALID_SECTIONS.find(s => s === rawSection) ?? "general"
+      openSettings(section)
     }
   }, [openSettings])
 
@@ -45,7 +46,7 @@ export function SettingsModal() {
     } else {
       url.hash = ""
     }
-    history.replaceState(null, "", url.pathname + url.search + (url.hash || ""))
+    history.replaceState(null, "", url.pathname + url.search + url.hash)
   }, [open, settingsSection])
 
   // Close on Escape

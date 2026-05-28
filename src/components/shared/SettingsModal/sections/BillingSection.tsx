@@ -75,7 +75,7 @@ export function BillingSection() {
           )}
           {subscription?.cancel_at_period_end && subscription?.current_period_end && (
             <span className="text-xs text-fg-3" suppressHydrationWarning>
-              Cancels on {new Date(subscription.current_period_end).toLocaleDateString("en-GB")}
+              Cancels on {new Date(subscription.current_period_end).toLocaleDateString(undefined)}
             </span>
           )}
           {subscription?.current_period_end && !subscription.cancel_at_period_end && (

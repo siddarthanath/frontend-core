@@ -29,13 +29,14 @@ export function Sidebar({ defaultCollapsed = false }: SidebarProps) {
 
   return (
     <aside
-      className="hidden lg:flex flex-col border-r border-border bg-surface transition-all duration-200 shrink-0"
-      style={{ width: collapsed ? "var(--sidebar-collapsed)" : "var(--sidebar-width)" }}
+      className={cn(
+        "hidden lg:flex flex-col border-r border-border bg-surface transition-all duration-200 shrink-0",
+        collapsed ? "w-(--sidebar-collapsed)" : "w-(--sidebar-width)"
+      )}
     >
       {/* Header */}
       <div
-        className="flex items-center border-b border-border shrink-0 px-2.5"
-        style={{ height: "var(--header-height)" }}
+        className="flex items-center border-b border-border shrink-0 px-2.5 h-(--header-height)"
       >
         {collapsed ? (
           /* Collapsed: logo swaps to expand button on hover */

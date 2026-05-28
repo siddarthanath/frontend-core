@@ -32,8 +32,7 @@ export function AppShell({ children, defaultCollapsed = false, rightPanel }: App
           {/* Right panel: hidden below xl to avoid cramped layout on tablets */}
           {rightPanel && (
             <aside
-              className="hidden xl:flex flex-col overflow-auto border-l border-border bg-surface shrink-0"
-              style={{ width: "var(--panel-width)" }}
+              className="hidden xl:flex flex-col overflow-auto border-l border-border bg-surface shrink-0 w-(--panel-width)"
             >
               {rightPanel}
             </aside>

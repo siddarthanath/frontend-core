@@ -1,9 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth"
-import type { UserMeResponse, UpdateProfileBody } from "@/types/user"
-
-export type { UserMeResponse, UpdateProfileBody }
+import type { UserMeResponse, UpdateProfileBody, UpdatePasswordBody, UpdateEmailBody } from "@/types/user"
 
 export const userKeys = {
   me: ["user", "me"] as const,
@@ -40,7 +38,7 @@ export function useDeleteAccount() {
 
 export function useUpdatePassword() {
   return useMutation({
-    mutationFn: (body: { new_password: string }) =>
+    mutationFn: (body: UpdatePasswordBody) =>
       api.put("api/v1/user/password", { json: body }).json<{ message: string }>(),
   })
 }
@@ -48,7 +46,7 @@ export function useUpdatePassword() {
 export function useUpdateEmail() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { new_email: string }) =>
+    mutationFn: (body: UpdateEmailBody) =>
       api.put("api/v1/user/email", { json: body }).json<{ message: string }>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: userKeys.me }),
   })

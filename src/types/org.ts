@@ -19,3 +19,22 @@ export interface MemberResponse {
   email: string | null
   created_at: string
 }
+
+export interface CreateOrgBody {
+  name: string
+  slug: string
+}
+
+export interface UpdateOrgBody {
+  name: string
+}
+
+export interface InviteMemberBody {
+  email: string
+  role: OrgRole
+}
+
+export interface ChangeRoleBody {
+  userId: string
+  role: OrgRole
+}

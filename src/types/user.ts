@@ -14,3 +14,11 @@ export interface UpdateProfileBody {
   first_name?: string | null
   last_name?: string | null
 }
+
+export interface UpdatePasswordBody {
+  new_password: string
+}
+
+export interface UpdateEmailBody {
+  new_email: string
+}

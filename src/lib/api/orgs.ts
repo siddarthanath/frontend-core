@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
-import type { MemberResponse, OrgResponse, OrgRole } from "@/types/org"
+import type { ChangeRoleBody, CreateOrgBody, InviteMemberBody, MemberResponse, OrgResponse, UpdateOrgBody } from "@/types/org"
 
 export const orgKeys = {
   all: ["orgs"] as const,
@@ -34,7 +34,7 @@ export function useOrgMembers(orgId: string) {
 export function useCreateOrg() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { name: string; slug: string }) =>
+    mutationFn: (body: CreateOrgBody) =>
       api.post("api/v1/orgs", { json: body }).json<OrgResponse>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: orgKeys.all }),
   })
@@ -43,7 +43,7 @@ export function useCreateOrg() {
 export function useUpdateOrg(orgId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { name: string }) =>
+    mutationFn: (body: UpdateOrgBody) =>
       api.patch(`api/v1/orgs/${orgId}`, { json: body }).json<OrgResponse>(),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: orgKeys.detail(orgId) })
@@ -55,7 +55,7 @@ export function useUpdateOrg(orgId: string) {
 export function useInviteMember(orgId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { email: string; role: OrgRole }) =>
+    mutationFn: (body: InviteMemberBody) =>
       api.post(`api/v1/orgs/${orgId}/members`, { json: body }).json<MemberResponse>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: orgKeys.members(orgId) }),
   })
@@ -76,7 +76,7 @@ export function useAcceptInvite(orgId: string) {
 export function useChangeRole(orgId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ userId, role }: { userId: string; role: OrgRole }) =>
+    mutationFn: ({ userId, role }: ChangeRoleBody) =>
       api
         .patch(`api/v1/orgs/${orgId}/members/${userId}`, { json: { role } })
         .json<MemberResponse>(),
