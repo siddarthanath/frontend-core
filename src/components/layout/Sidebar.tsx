@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import { NAV_ITEMS } from "@/types/nav"
 import { useUiStore } from "@/stores/ui"
 import { useAuthStore } from "@/stores/auth"
-import { UserMenu } from "@/components/shared/UserMenu"
+import { UserMenu } from "@/components/layout/UserMenu"
 
 
 interface SidebarProps {
@@ -107,15 +107,9 @@ export function Sidebar({ defaultCollapsed = false }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      {collapsed ? (
-        <div className="border-t border-border shrink-0 flex flex-col items-center py-2 gap-1">
-          <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed />
-        </div>
-      ) : (
-        <div className="border-t border-border shrink-0">
-          <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed={false} />
-        </div>
-      )}
+      <div className="border-t border-border shrink-0">
+        <UserMenu email={user?.email ?? ""} displayName={displayName} collapsed={collapsed} />
+      </div>
     </aside>
   )
 }

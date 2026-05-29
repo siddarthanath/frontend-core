@@ -2,7 +2,7 @@
 
 import { User, Palette, CreditCard, Shield, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { SettingsSection } from "@/lib/modal-keys"
+import type { SettingsSection } from "@/components/shared/SettingsModal/modal-keys"
 
 // NOTE: ApiKeysSection and FlagsSection are intentionally absent from this nav.
 // Add them here when the product layer is ready to expose them to end users.

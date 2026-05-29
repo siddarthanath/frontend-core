@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
-import { RequireOrg } from "@/components/shared/RequireOrg"
+import { RequireOrg } from "@/components/shared/guards/RequireOrg"
 
 const mockStore = vi.fn()
 

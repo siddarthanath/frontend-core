@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/auth/server"
 import { AppShell } from "@/components/layout/AppShell"
-import { HydrateAuthStore } from "@/components/shared/HydrateAuthStore"
+import { HydrateAuthStore } from "@/lib/auth/HydrateAuthStore"
 import type { UserMeResponse } from "@/types/user"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {

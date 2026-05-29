@@ -10,7 +10,7 @@ import { PersonalisationSection } from "./sections/PersonalisationSection"
 import { BillingSection } from "./sections/BillingSection"
 import { SecuritySection } from "./sections/SecuritySection"
 import { AccountSection } from "./sections/AccountSection"
-import type { SettingsSection } from "@/lib/modal-keys"
+import type { SettingsSection } from "@/components/shared/SettingsModal/modal-keys"
 
 const VALID_SECTIONS: SettingsSection[] = ["general", "personalisation", "billing", "security", "account"]
 

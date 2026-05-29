@@ -8,6 +8,7 @@ import { useUiStore } from "@/stores/ui"
 import { useSubscription } from "@/lib/api/billing"
 import { useCurrentUser } from "@/lib/api/user"
 import { PLAN_LABELS_LONG } from "@/types/billing"
+import { cn } from "@/lib/utils"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,33 +42,29 @@ export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
     router.refresh()
   }
 
-  const avatar = (
-    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-xs font-semibold">
-      {initial}
-    </span>
-  )
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        {collapsed ? (
-          <button
-            className="flex h-6 w-6 items-center justify-center rounded-full bg-brand text-brand-on text-xs font-semibold hover:opacity-80 transition-opacity focus:outline-none"
-            aria-label="User menu"
-          >
+        <button
+          className="flex items-center gap-2.5 w-full px-3 py-2 hover:bg-bg-2 transition-colors text-left focus:outline-none"
+          aria-label="User menu"
+        >
+          {/* Avatar — single persistent element, never remounts, prevents brand-colour flash on collapse */}
+          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-xs font-semibold">
             {initial}
-          </button>
-        ) : (
-          <button className="flex items-center gap-2.5 w-full px-3 py-2 hover:bg-bg-2 transition-colors text-left focus:outline-none">
-            {avatar}
-            <div className="flex flex-col flex-1 min-w-0">
-              {displayName && (
-                <span className="text-sm font-medium text-fg truncate leading-tight">{displayName}</span>
-              )}
-              <span className="text-xs text-fg-3 leading-tight">{planLabel}</span>
-            </div>
-          </button>
-        )}
+          </span>
+          <div
+            className={cn(
+              "flex flex-col min-w-0 overflow-hidden transition-[max-width,opacity] duration-200",
+              collapsed ? "max-w-0 opacity-0" : "max-w-full flex-1 opacity-100"
+            )}
+          >
+            {displayName && (
+              <span className="text-sm font-medium text-fg truncate leading-tight">{displayName}</span>
+            )}
+            <span className="text-xs text-fg-3 leading-tight">{planLabel}</span>
+          </div>
+        </button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56" side="top" align="start">

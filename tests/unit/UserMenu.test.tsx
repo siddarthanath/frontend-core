@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
-import { UserMenu } from "@/components/shared/UserMenu"
+import { UserMenu } from "@/components/layout/UserMenu"
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
 vi.mock("@/lib/api/user", () => ({ useCurrentUser: () => ({ data: undefined }) }))

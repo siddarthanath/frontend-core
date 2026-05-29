@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 import { NAV_ITEMS } from "@/types/nav"
 import { useAuthStore } from "@/stores/auth"
-import { UserMenu } from "@/components/shared/UserMenu"
+import { UserMenu } from "@/components/layout/UserMenu"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
 
 export function MobileHeader() {
