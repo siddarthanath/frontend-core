@@ -52,7 +52,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
       password: data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTo)}`,
-        data: { first_name: data.first_name, last_name: data.last_name },
+        data: { first_name: data.first_name, last_name: data.last_name, full_name: `${data.first_name} ${data.last_name}`.trim() },
       },
     })
     if (error) {
@@ -70,7 +70,7 @@ export function SignupForm({ redirectTo }: SignupFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <div className="flex gap-3">
+      <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex flex-col gap-1.5 flex-1">
           <Label htmlFor="first_name">First name</Label>
           <Input id="first_name" type="text" autoComplete="given-name" {...register("first_name")} />

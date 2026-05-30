@@ -46,11 +46,11 @@ export function UserMenu({ email, displayName, collapsed }: UserMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="flex items-center gap-2.5 w-full px-3 py-2 hover:bg-bg-2 transition-colors text-left focus:outline-none"
+          className="flex items-center gap-2.5 w-full px-3 h-13 hover:bg-bg-2 transition-colors text-left focus:outline-none"
           aria-label="User menu"
         >
           {/* Avatar — single persistent element, never remounts, prevents brand-colour flash on collapse */}
-          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-xs font-semibold">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-brand-on text-[16px] font-bold select-none">
             {initial}
           </span>
           <div

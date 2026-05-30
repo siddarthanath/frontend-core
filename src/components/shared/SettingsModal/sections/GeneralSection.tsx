@@ -141,7 +141,7 @@ function InviteForm({ orgId }: { orgId: string }) {
   const [emailError, setEmailError] = useState<string | null>(null)
   const invite = useInviteMember(orgId)
 
-  async function handleInvite(e: { preventDefault: () => void }) {
+  async function handleInvite(e: { preventDefault(): void }) {
     e.preventDefault()
     setEmailError(null)
     try {
