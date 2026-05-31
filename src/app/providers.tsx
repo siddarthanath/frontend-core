@@ -2,8 +2,7 @@
 
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider } from "next-themes"
-import { toast } from "sonner"
-import { Toaster } from "sonner"
+import { toast, Toaster } from "sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { type ReactNode, useState, useEffect } from "react"
 import { ApiResponseError } from "@/lib/api/client"

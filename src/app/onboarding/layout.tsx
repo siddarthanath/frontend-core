@@ -3,7 +3,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/auth/server"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
-import { HydrateAuthStore } from "@/components/shared/HydrateAuthStore"
+import { HydrateAuthStore } from "@/lib/auth/HydrateAuthStore"
 
 // Onboarding is authenticated but has no AppShell.
 // Session guard mirrors (app)/layout.tsx — unauthenticated users go to /login.

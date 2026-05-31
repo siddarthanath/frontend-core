@@ -89,3 +89,23 @@ export interface CheckoutResponse {
 export interface PortalResponse {
   portal_url: string
 }
+
+export interface CreateCheckoutBody {
+  plan: Plan
+  period: BillingPeriod
+  success_url: string
+  cancel_url: string
+}
+
+export interface CreatePortalBody {
+  return_url: string
+}
+
+export interface UpgradeSubscriptionBody {
+  plan: Plan
+  period: BillingPeriod
+}
+
+export interface CancelSubscriptionBody {
+  reason?: string
+}

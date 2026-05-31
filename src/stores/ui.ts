@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
-import type { SettingsSection } from "@/lib/modal-keys"
+import type { SettingsSection } from "@/components/shared/SettingsModal/modal-keys"
 
 interface UIState {
   sidebarCollapsed: boolean

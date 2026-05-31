@@ -11,6 +11,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useCancelSubscription } from "@/lib/api/billing"
 
@@ -56,7 +57,7 @@ export function CancelSubscriptionModal({
         </DialogHeader>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="cancel-reason" className="text-sm text-fg-2">Reason (optional)</label>
+          <Label htmlFor="cancel-reason">Reason (optional)</Label>
           <Textarea
             id="cancel-reason"
             placeholder="Tell us why you're leaving — this helps us improve."

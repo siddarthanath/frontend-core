@@ -8,7 +8,7 @@ import { useUiStore } from "@/stores/ui"
 import { useCurrentUser } from "@/lib/api/user"
 import { useSubscription, useCreateCheckout, useCreatePortal, useUpgradeSubscription } from "@/lib/api/billing"
 import { PricingCard } from "@/components/billing/PricingCard"
-import { PLAN_CONFIGS, PLAN_ORDER } from "@/types/billing"
+import { PLAN_CONFIGS, PLAN_LABELS, PLAN_ORDER } from "@/types/billing"
 import type { BillingPeriod, Plan } from "@/types/billing"
 import {
   Dialog,
@@ -132,15 +132,15 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
         <DialogHeader>
           <DialogTitle>Downgrade to Free?</DialogTitle>
           <DialogDescription>
-            To cancel your subscription you{"'"}ll be taken to Stripe.
+            To cancel your subscription you&apos;ll be taken to Stripe.
             {periodEndLabel && (
-              <> You{"'"}ll keep access to your current plan until <strong suppressHydrationWarning>{periodEndLabel}</strong>.</>
+              <> You&apos;ll keep access to your current plan until <strong suppressHydrationWarning>{periodEndLabel}</strong>.</>
             )}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => setConfirmFreeOpen(false)}>
-            Stay on {subscription?.plan ?? "current plan"}
+            {`Stay on ${PLAN_LABELS[subscription?.plan ?? "free"]}`}
           </Button>
           <Button
             variant="destructive"
@@ -193,7 +193,8 @@ export function PlansPageClient({ defaultReturnTo = "/app/settings/billing" }: P
             description={description}
             features={features}
             isFeatured={featured}
-            isCurrentPlan={subscription?.plan === plan && plan !== "free"}
+            isCurrentPlan={subscription?.plan === plan && !subscription?.cancel_at_period_end}
+            isCancelling={subscription?.cancel_at_period_end === true && subscription?.plan === plan}
             showYearlyBanner={period === "yearly"}
             onUpgrade={contactUs ? () => handleUpgrade("enterprise") : () => handleUpgrade(plan)}
             loading={createCheckout.isPending || createPortal.isPending || upgradeSubscription.isPending}

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/auth/client"
+import { FieldError } from "@/components/shared/FeedbackStates/FieldError"
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -39,11 +40,7 @@ export function ResetPasswordForm() {
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" autoComplete="email" {...register("email")} />
-        {errors.email && (
-          <p className="text-sm text-error">
-            {errors.email.message}
-          </p>
-        )}
+        <FieldError message={errors.email?.message ?? null} />
       </div>
       <Button type="submit" disabled={isSubmitting} className="w-full">
         {isSubmitting ? "Sending…" : "Send reset link"}

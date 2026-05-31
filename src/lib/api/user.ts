@@ -1,16 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
-import type { UserMeResponse, UpdateProfileBody } from "@/types/user"
-
-export type { UserMeResponse, UpdateProfileBody }
-
-// ── Query keys ────────────────────────────────────────────────────────────────
+import { useAuthStore } from "@/stores/auth"
+import type { UserMeResponse, UpdateProfileBody, UpdatePasswordBody, UpdateEmailBody } from "@/types/user"
 
 export const userKeys = {
   me: ["user", "me"] as const,
 }
-
-// ── Queries ───────────────────────────────────────────────────────────────────
 
 /** Fetches /user/me — triggers personal org creation on first call (B2C). */
 export function useCurrentUser() {
@@ -21,14 +16,16 @@ export function useCurrentUser() {
   })
 }
 
-// ── Mutations ─────────────────────────────────────────────────────────────────
-
 export function useUpdateProfile() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: (body: UpdateProfileBody) =>
       api.patch("api/v1/user/me", { json: body }).json<UserMeResponse>(),
-    onSuccess: () => qc.invalidateQueries({ queryKey: userKeys.me }),
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: userKeys.me })
+      const name = [data.first_name, data.last_name].filter(Boolean).join(" ") || null
+      useAuthStore.getState().setDisplayName(name)
+    },
   })
 }
 
@@ -41,7 +38,7 @@ export function useDeleteAccount() {
 
 export function useUpdatePassword() {
   return useMutation({
-    mutationFn: (body: { new_password: string }) =>
+    mutationFn: (body: UpdatePasswordBody) =>
       api.put("api/v1/user/password", { json: body }).json<{ message: string }>(),
   })
 }
@@ -49,7 +46,7 @@ export function useUpdatePassword() {
 export function useUpdateEmail() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { new_email: string }) =>
+    mutationFn: (body: UpdateEmailBody) =>
       api.put("api/v1/user/email", { json: body }).json<{ message: string }>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: userKeys.me }),
   })

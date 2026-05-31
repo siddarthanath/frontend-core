@@ -6,8 +6,9 @@ export interface NavItem {
   label: string
   icon: LucideIcon
   badge?: string
+  group?: string
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard, group: "OVERVIEW" },
 ]

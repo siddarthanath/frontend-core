@@ -9,6 +9,7 @@ interface PricingCardProps {
   description: string
   features: string[]
   isCurrentPlan: boolean
+  isCancelling?: boolean
   isFeatured?: boolean
   showYearlyBanner?: boolean
   onUpgrade?: () => void
@@ -21,6 +22,7 @@ export function PricingCard({
   description,
   features,
   isCurrentPlan,
+  isCancelling = false,
   isFeatured = false,
   showYearlyBanner = false,
   onUpgrade,
@@ -73,6 +75,8 @@ export function PricingCard({
       >
         {isCurrentPlan
           ? "Current plan"
+          : isCancelling
+          ? "Reactivate"
           : isEnterprise
           ? "Contact us"
           : isFree
@@ -81,9 +85,14 @@ export function PricingCard({
       </Button>
     </div>
 
-    {isFeatured && (
+    {isFeatured && !isCurrentPlan && (
       <div className="flex items-center justify-center rounded-b-xl border border-t-0 border-brand bg-brand py-1.5">
         <span className="text-[11px] font-bold tracking-widest uppercase text-brand-on">Most Popular</span>
+      </div>
+    )}
+    {isCurrentPlan && (
+      <div className="flex items-center justify-center rounded-b-xl border border-t-0 border-border bg-bg-2 py-1.5">
+        <span className="text-[11px] font-bold tracking-widest uppercase text-fg-3">Current plan</span>
       </div>
     )}
     </div>

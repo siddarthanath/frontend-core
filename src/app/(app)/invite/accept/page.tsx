@@ -9,7 +9,7 @@ export default function AcceptInvitePage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const orgId = searchParams.get("org_id") ?? ""
-  const acceptInvite = useAcceptInvite(orgId)
+  const { mutate: acceptInvite } = useAcceptInvite(orgId)
 
   useEffect(() => {
     if (!orgId) {
@@ -18,7 +18,7 @@ export default function AcceptInvitePage() {
       return
     }
 
-    acceptInvite.mutate(undefined, {
+    acceptInvite(undefined, {
       onSuccess: () => {
         // useAcceptInvite already invalidates orgKeys.all; useAutoSelectOrg picks up the
         // correct org name from the refetched list — no need to write a blank name here.
@@ -30,8 +30,7 @@ export default function AcceptInvitePage() {
         router.replace("/app/dashboard")
       },
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orgId])
+  }, [orgId, acceptInvite, router])
 
   return (
     <div className="flex items-center justify-center h-full">

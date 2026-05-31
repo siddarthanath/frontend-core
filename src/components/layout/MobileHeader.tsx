@@ -9,7 +9,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden"
 import { NAV_ITEMS } from "@/types/nav"
 import { useAuthStore } from "@/stores/auth"
-import { UserMenu } from "@/components/shared/UserMenu"
+import { UserMenu } from "@/components/layout/UserMenu"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
 
 export function MobileHeader() {
@@ -19,8 +19,7 @@ export function MobileHeader() {
 
   return (
     <header
-      className="lg:hidden flex items-center justify-between px-4 border-b border-border bg-surface shrink-0"
-      style={{ height: "var(--header-height)" }}
+      className="lg:hidden flex items-center justify-between px-4 border-b border-border bg-surface shrink-0 h-(--header-height)"
     >
       <Sheet>
         <SheetTrigger asChild>
@@ -37,8 +36,7 @@ export function MobileHeader() {
           </VisuallyHidden.Root>
           {/* Logo */}
           <div
-            className="flex items-center gap-2 px-4 border-b border-border shrink-0"
-            style={{ height: "var(--header-height)" }}
+            className="flex items-center gap-2 px-4 border-b border-border shrink-0 h-(--header-height)"
           >
             <Image src="/vercel.svg" alt="Logo" width={16} height={16} className="dark:invert" />
             <span className="text-sm font-semibold text-fg">Template</span>

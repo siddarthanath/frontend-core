@@ -5,7 +5,7 @@ import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
 import { useCurrentUser, useUpdateProfile } from "@/lib/api/user"
 import { useOrgs, useOrgMembers, useTransferOwnership, useInviteMember } from "@/lib/api/orgs"
-import type { UserMeResponse } from "@/lib/api/user"
+import type { UserMeResponse } from "@/types/user"
 import type { MemberResponse, OrgRole } from "@/types/org"
 import { ErrorState } from "@/components/shared/FeedbackStates/ErrorState"
 import { Button } from "@/components/ui/button"
@@ -91,6 +91,7 @@ function GeneralForm({ me }: { me: UserMeResponse }) {
         </div>
       </SettingsCard>
 
+      {/* To add workspace creation UI: expose a form calling useCreateOrg() → POST /api/v1/orgs with name + slug. Product-layer feature. */}
       <MembersCard userId={user?.id ?? ""} />
     </div>
   )
@@ -140,7 +141,7 @@ function InviteForm({ orgId }: { orgId: string }) {
   const [emailError, setEmailError] = useState<string | null>(null)
   const invite = useInviteMember(orgId)
 
-  async function handleInvite(e: React.FormEvent<HTMLFormElement>) {
+  async function handleInvite(e: { preventDefault(): void }) {
     e.preventDefault()
     setEmailError(null)
     try {
@@ -191,7 +192,7 @@ function InviteForm({ orgId }: { orgId: string }) {
   )
 }
 
-const ROLE_LABELS: Record<string, string> = {
+const ROLE_LABELS: Record<OrgRole, string> = {
   owner: "Owner",
   admin: "Admin",
   member: "Member",

@@ -50,8 +50,6 @@ export function OAuthButton({
   )
 }
 
-// ── Google ────────────────────────────────────────────────────────────────────
-
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
     <path
@@ -87,8 +85,6 @@ export function GoogleButton({ redirectTo }: ProviderButtonProps) {
     />
   )
 }
-
-// ── Microsoft (Outlook / M365) ────────────────────────────────────────────────
 
 const MicrosoftIcon = () => (
   <svg width="18" height="18" viewBox="0 0 21 21" aria-hidden>

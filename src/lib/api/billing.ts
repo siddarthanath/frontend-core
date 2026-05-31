@@ -1,14 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
-import type { BillingPeriod, CheckoutResponse, Plan, PortalResponse, SubscriptionResponse } from "@/types/billing"
-
-// ── Query keys ────────────────────────────────────────────────────────────────
+import type { CancelSubscriptionBody, CheckoutResponse, CreateCheckoutBody, CreatePortalBody, PortalResponse, SubscriptionResponse, UpgradeSubscriptionBody } from "@/types/billing"
 
 export const billingKeys = {
   subscription: (orgId: string) => ["billing", orgId, "subscription"] as const,
 }
-
-// ── Queries ───────────────────────────────────────────────────────────────────
 
 export function useSubscription(orgId: string) {
   return useQuery({
@@ -18,12 +14,10 @@ export function useSubscription(orgId: string) {
   })
 }
 
-// ── Mutations ─────────────────────────────────────────────────────────────────
-
 export function useCreateCheckout(orgId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { plan: Plan; period: BillingPeriod; success_url: string; cancel_url: string }) =>
+    mutationFn: (body: CreateCheckoutBody) =>
       api.post(`api/v1/orgs/${orgId}/billing/checkout`, { json: body }).json<CheckoutResponse>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: billingKeys.subscription(orgId) }),
   })
@@ -31,7 +25,7 @@ export function useCreateCheckout(orgId: string) {
 
 export function useCreatePortal(orgId: string) {
   return useMutation({
-    mutationFn: (body: { return_url: string }) =>
+    mutationFn: (body: CreatePortalBody) =>
       api.post(`api/v1/orgs/${orgId}/billing/portal`, { json: body }).json<PortalResponse>(),
   })
 }
@@ -39,7 +33,7 @@ export function useCreatePortal(orgId: string) {
 export function useUpgradeSubscription(orgId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { plan: Plan; period: BillingPeriod }) =>
+    mutationFn: (body: UpgradeSubscriptionBody) =>
       api.post(`api/v1/orgs/${orgId}/billing/upgrade`, { json: body }).json<{ message: string }>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: billingKeys.subscription(orgId) }),
   })
@@ -48,7 +42,7 @@ export function useUpgradeSubscription(orgId: string) {
 export function useCancelSubscription(orgId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { reason?: string }) =>
+    mutationFn: (body: CancelSubscriptionBody) =>
       api.post(`api/v1/orgs/${orgId}/billing/cancel`, { json: body }).json<{ message: string }>(),
     onSuccess: () => qc.invalidateQueries({ queryKey: billingKeys.subscription(orgId) }),
   })

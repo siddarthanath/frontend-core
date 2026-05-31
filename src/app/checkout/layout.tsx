@@ -3,7 +3,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/auth/server"
 import { ThemeToggle } from "@/components/shared/ThemeToggle"
-import { HydrateAuthStore } from "@/components/shared/HydrateAuthStore"
+import { HydrateAuthStore } from "@/lib/auth/HydrateAuthStore"
 
 export default async function CheckoutLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()

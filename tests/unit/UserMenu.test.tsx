@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
-import { UserMenu } from "@/components/shared/UserMenu"
+import { UserMenu } from "@/components/layout/UserMenu"
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }) }))
 vi.mock("@/lib/api/user", () => ({ useCurrentUser: () => ({ data: undefined }) }))
@@ -44,9 +44,11 @@ describe("UserMenu", () => {
     expect(screen.getByText(label)).toBeInTheDocument()
   })
 
-  it("renders collapsed trigger without name or plan text", () => {
+  it("hides name and plan text visually when collapsed", () => {
     render(<UserMenu email="sid@example.com" displayName="Siddartha" collapsed />)
-    expect(screen.queryByText("Siddartha")).not.toBeInTheDocument()
-    expect(screen.queryByText("Free plan")).not.toBeInTheDocument()
+    // Text stays in the DOM (no remount) but the wrapper is opacity-0 / max-w-0
+    const name = screen.getByText("Siddartha")
+    expect(name.closest("div")).toHaveClass("opacity-0")
+    expect(name.closest("div")).toHaveClass("max-w-0")
   })
 })

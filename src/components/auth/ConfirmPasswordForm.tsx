@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createClient } from "@/lib/auth/client"
+import { FieldError } from "@/components/shared/FeedbackStates/FieldError"
 import { validatePassword } from "@/lib/auth/password"
 
 const schema = z.object({
@@ -53,11 +54,7 @@ export function ConfirmPasswordForm() {
           autoComplete="new-password"
           {...register("password")}
         />
-        {errors.password && (
-          <p className="text-sm text-error">
-            {errors.password.message}
-          </p>
-        )}
+        <FieldError message={errors.password?.message ?? null} />
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="confirm">Confirm password</Label>
@@ -67,11 +64,7 @@ export function ConfirmPasswordForm() {
           autoComplete="new-password"
           {...register("confirm")}
         />
-        {errors.confirm && (
-          <p className="text-sm text-error">
-            {errors.confirm.message}
-          </p>
-        )}
+        <FieldError message={errors.confirm?.message ?? null} />
       </div>
       <Button type="submit" disabled={isSubmitting} className="w-full">
         {isSubmitting ? "Updating…" : "Update password"}
