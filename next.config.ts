@@ -2,9 +2,14 @@ import type { NextConfig } from "next";
 
 // Endpoints the browser is allowed to talk to (Supabase + this app's backend API).
 // Pulled from env so the CSP follows whatever project the fork points at.
+// Supabase Realtime uses WebSockets, so the wss:// companion of the Supabase URL is
+// included too — https→wss — otherwise Realtime connections would be blocked by CSP.
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseWsUrl = supabaseUrl?.replace(/^http/, "ws");
 const connectSrc = [
   "'self'",
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  supabaseUrl,
+  supabaseWsUrl,
   process.env.NEXT_PUBLIC_API_URL,
 ]
   .filter(Boolean)

@@ -43,7 +43,14 @@ export function SecuritySection() {
       setCurrentPassword("")
       setNewPassword("")
     } catch (err) {
-      if (err instanceof ApiResponseError && err.error.code === "VALIDATION_ERROR") {
+      // The API tags a wrong current password with detail="current_password" so we
+      // attribute it to the right field — any other VALIDATION_ERROR isn't about
+      // this field (new-password strength is already checked above), so we toast it.
+      if (
+        err instanceof ApiResponseError &&
+        err.error.code === "VALIDATION_ERROR" &&
+        err.error.detail === "current_password"
+      ) {
         setCurrentPasswordError("Incorrect password")
       } else {
         toast.error("Failed to update password")
