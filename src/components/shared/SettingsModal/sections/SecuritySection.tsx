@@ -3,8 +3,8 @@
 import { useState } from "react"
 import { toast } from "sonner"
 import { useAuthStore } from "@/stores/auth"
-import { useUpdatePassword, useUpdateEmail } from "@/lib/api/user"
-import { createClient } from "@/lib/auth/client"
+import { useUpdatePassword } from "@/lib/api/user"
+import { ApiResponseError } from "@/lib/api/client"
 import { validatePassword } from "@/lib/auth/password"
 import { cn } from "@/lib/utils"
 import { FieldError } from "@/components/shared/FeedbackStates/FieldError"
@@ -22,10 +22,8 @@ export function SecuritySection() {
   const [currentPasswordError, setCurrentPasswordError] = useState<string | null>(null)
   const [newPassword, setNewPassword] = useState("")
   const [newPasswordError, setNewPasswordError] = useState<string | null>(null)
-  const [newEmail, setNewEmail] = useState("")
 
   const updatePassword = useUpdatePassword()
-  const updateEmail = useUpdateEmail()
 
   async function handlePasswordUpdate() {
     const strengthError = validatePassword(newPassword)
@@ -34,37 +32,22 @@ export function SecuritySection() {
       return
     }
 
-    const supabase = createClient()
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: user?.email ?? "",
-      password: currentPassword,
-    })
-    if (authError) {
-      if (authError.status === 400) {
-        setCurrentPasswordError("Incorrect password")
-      } else {
-        toast.error(authError.message || "Failed to verify password")
-      }
-      return
-    }
-
+    // The current password is verified server-side (the API re-authenticates it).
+    // A wrong password returns VALIDATION_ERROR, which we surface on the field below.
     try {
-      await updatePassword.mutateAsync({ new_password: newPassword })
+      await updatePassword.mutateAsync({
+        current_password: currentPassword,
+        new_password: newPassword,
+      })
       toast.success("Password updated")
       setCurrentPassword("")
       setNewPassword("")
-    } catch {
-      toast.error("Failed to update password")
-    }
-  }
-
-  async function handleEmailUpdate() {
-    try {
-      await updateEmail.mutateAsync({ new_email: newEmail })
-      toast.success("Check your new email address for a confirmation link")
-      setNewEmail("")
-    } catch {
-      toast.error("Failed to update email")
+    } catch (err) {
+      if (err instanceof ApiResponseError && err.error.code === "VALIDATION_ERROR") {
+        setCurrentPasswordError("Incorrect password")
+      } else {
+        toast.error("Failed to update password")
+      }
     }
   }
 
@@ -72,7 +55,7 @@ export function SecuritySection() {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="text-base font-semibold text-fg">Security</h2>
-        <p className="text-sm text-fg-3 mt-0.5">Manage your password, email, and two-factor authentication.</p>
+        <p className="text-sm text-fg-3 mt-0.5">Manage your password.</p>
       </div>
 
       {hasEmailProvider && (
@@ -130,41 +113,28 @@ export function SecuritySection() {
         </form>
       )}
 
-      {hasEmailProvider && (
-        <form onSubmit={(e) => { e.preventDefault(); handleEmailUpdate() }}>
-          <SettingsCard
-            title="Change email"
-            description="A confirmation link will be sent to your new address."
-            footer={
-              <Button type="submit" size="sm" disabled={!newEmail || updateEmail.isPending}>
-                {updateEmail.isPending ? "Sending…" : "Update email"}
-              </Button>
-            }
-          >
-            <div className="flex flex-col gap-1.5 max-w-xs">
-              <Label htmlFor="new-email">New email</Label>
-              <Input
-                id="new-email"
-                type="email"
-                value={newEmail}
-                onChange={(e) => setNewEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-          </SettingsCard>
-        </form>
-      )}
+      {/*
+        EMAIL CHANGE — intentionally disabled in this template.
+        Email is treated as fixed (as it is for OAuth accounts) because changing it
+        safely requires infrastructure this template does not ship:
+          1. A transactional email provider (e.g. Resend) to send a confirmation link
+             to the NEW address before the change takes effect.
+          2. Server-side re-authentication (current password), same pattern as the
+             password change above — a stolen JWT must not be able to seize the
+             account by swapping the email.
+          3. Syncing the new address into user_profiles.email AND updating Supabase
+             auth, so the app-level row and the auth row never diverge.
+        To re-enable: implement the above, then uncomment the backend
+        PUT /user/email handler (src/api/v1/user.py) and restore a "Change email"
+        SettingsCard here wired to a useUpdateEmail() mutation.
+      */}
 
-      <SettingsCard
-        title="Two-factor authentication"
-        description="Add an extra layer of security with an authenticator app."
-        action={
-          <Button variant="outline" size="sm" disabled>
-            Set up MFA
-          </Button>
-        }
-      />
+      {/*
+        TWO-FACTOR AUTH — not implemented. Supabase supports MFA (TOTP) via
+        supabase.auth.mfa.*. To add: enrol a factor, show the QR code, verify the
+        first code, then require a challenge on sign-in. Left out of the template
+        to keep the auth surface minimal.
+      */}
     </div>
   )
 }

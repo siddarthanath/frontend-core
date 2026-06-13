@@ -33,7 +33,11 @@ async function getAuthHeader(): Promise<Record<string, string>> {
  */
 export const api = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
-  retry: { limit: 2, statusCodes: [408, 429, 500, 502, 503, 504] },
+  // Retry GETs only. Auto-retrying a failed mutation (POST/PUT/PATCH/DELETE) risks
+  // executing a non-idempotent action twice — e.g. a 500 after an invite was already
+  // created server-side would send two invites. Mutations must be retried explicitly
+  // by the caller if needed.
+  retry: { limit: 2, methods: ["get"], statusCodes: [408, 429, 500, 502, 503, 504] },
   hooks: {
     beforeRequest: [
       async (request) => {

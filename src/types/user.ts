@@ -16,9 +16,12 @@ export interface UpdateProfileBody {
 }
 
 export interface UpdatePasswordBody {
+  current_password: string
   new_password: string
 }
 
+/** Email change is disabled in the template (see SecuritySection.tsx); kept for re-enable. */
 export interface UpdateEmailBody {
+  current_password: string
   new_email: string
 }
